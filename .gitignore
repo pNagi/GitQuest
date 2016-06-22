@@ -1,0 +1,7 @@
+node_modules
+bower_components
+build/scripts
+build/index.html
+*.env
+*.log
+.DS_Store

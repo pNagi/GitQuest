@@ -1,0 +1,21 @@
+{
+  "name": "git-quest",
+  "description": "Git Visualization",
+  "main": "app.js",
+  "authors": [
+    "Chonnipa Kittisiriprasert"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "EaselJS": "easeljs#^0.8.2"
+  }
+}
