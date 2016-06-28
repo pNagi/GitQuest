@@ -1,64 +1,54 @@
-import Tileset from '../../../../build/img/pokemon_bw2___season_tiles_by_shiney570-d9cytb8.png'
+import * as Config from 'shared/game/map/configs'
 
 exports.init = (repo) => {
+
+    var size = Config.SIZE
     var map = new createjs.Container()
-    var tileset = new createjs.SpriteSheet({
-        images: [Tileset],
-        frames: {
-            width: 32,
-            height: 32
-        },
-        animations: {
-            item: 65
-        }
-    })
+    var tileset = new createjs.SpriteSheet(Config.TILESET)
 
-    var count = 0;
-    for (var row = 0; row < canvas.height / 32; row++) {
-        for (var col = 0; col < canvas.width / 32; col++) {
+    var mapWidth = canvas.width
+    var mapHeight = canvas.height
+
+    for (var row = 0; row < mapHeight / size ; row++) {
+        for (var col = 0; col < mapWidth / size ; col++) {
             var tile = new createjs.Sprite(tileset);
-
-            switch (row % 4) {
-                case 0:
-                    tile.gotoAndStop(count++ % 4 + 4);
-                    break
-                case 1:
-                    tile.gotoAndStop(count++ % 4 + 4 + 16);
-                    break
-                case 2:
-                    tile.gotoAndStop(count++ % 4 + 4 + 32);
-                    break
-                case 3:
-                    tile.gotoAndStop(count++ % 4 + 4 + 48);
-                    break
-            }
-
-            tile.x = 32 * col;
-            tile.y = 32 * row;
+            Config.setGround(tile, row, col)
             map.addChild(tile);
         }
-        count = 0;
     }
 
-    var size = 32
-    var count = [1, 1]
+    var n = [0, 0]
 
-    repo.forEach(function(data) {
+    repo.forEach(function(item) {
 
-        var item = new createjs.Sprite(tileset, 'item').set({
-            x: -size + size * 2 * count[0]++,
-            y: -size + size * 2 * count[1]
+        var itemSprite
+
+        switch (item.type) {
+            case 'dir':
+                itemSprite = new createjs.Sprite(tileset, 'dir')
+                break
+            case 'file':
+                itemSprite = new createjs.Sprite(tileset, 'file')
+                break
+            default:
+                itemSprite = new createjs.Sprite(tileset, 'unknown')
+                break
+        }
+
+        itemSprite.set({
+            x: size * ((2 * n[0]++) + 1),
+            y: size * ((2 * n[1]) + 1)
         });
 
-        if (size + size * 2 * count[0] > canvas.width) {
-            count[0] = 1
-            count[1]++
+        if (size * ((2 * n[0]) + 3) > mapWidth) {
+            n[0] = 0
+            n[1]++
         }
-        if (size + size * 2 * count[1] > canvas.height) {
-            count[0] = 1
+        if (size * ((2 * n[1]) + 3) > mapHeight) {
+            n[0] = 0
         }
 
-        map.addChild(item)
+        map.addChild(itemSprite)
     })
 
     return map

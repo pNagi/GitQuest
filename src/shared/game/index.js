@@ -1,46 +1,38 @@
 import Player from 'shared/game/player'
 import MapGenerator from 'shared/game/map'
-
-var ENTER = 13,
-    SPACE = 32,
-    KEY_LEFT = 37,
-    KEY_UP = 38,
-    KEY_RIGHT = 39,
-    KEY_DOWN = 40
+import * as KeyCode from 'shared/game/constants/keyCodes'
 
 var speed = 3
 var width = 32
 var height = 32
 
-exports.start = () => {
-    var base = 'https://api.github.com/repos/'
+exports.start = (user, repo, path = '') => {
+    loadMap(user, repo, path)
+}
 
-    var getUrl = function(user, repo, path) {
-        return base + user + '/' + repo + '/contents/' + path
-    }
+var base = 'https://api.github.com/repos/'
 
-    function handleFileLoad(event) {
-        console.log(event.result)
-        init(event.result)
-    }
+var getUrl = (user, repo, path) => {
+    return base + user + '/' + repo + '/contents/' + path
+}
 
-    function handleComplete(event) {}
+var handleFileLoad = (event) => {
+    console.log(event.result)
+    init(event.result)
+}
 
-    function loadMap(user, repo, path) {
-        var queue = new createjs.LoadQueue()
-        queue.on('fileload', handleFileLoad, this)
-        queue.on('complete', handleComplete, this)
-        queue.loadFile({
-            src: getUrl(user, repo, path),
-            type: createjs.AbstractLoader.JSON
-        })
+var handleComplete = (event) => {}
 
-        queue.load()
-    }
+var loadMap = (user, repo, path) => {
+    var queue = new createjs.LoadQueue()
+    queue.on('fileload', handleFileLoad, this)
+    queue.on('complete', handleComplete, this)
+    queue.loadFile({
+        src: getUrl(user, repo, path),
+        type: createjs.AbstractLoader.JSON
+    })
 
-    var route = ['pnagi', 'Lecture', '']
-
-    loadMap(route[0], route[1], route[2])
+    queue.load()
 }
 
 var init = (repo) => {
@@ -59,33 +51,32 @@ var init = (repo) => {
 
     var d = [0, 0, 0, 0]
 
-    function talk() {
+    var talk = () => {
         console.log('talk')
         loadMap('pnagi', 'Lecture', 'Algorithm')
     }
 
     var getAction = function(e) {
-        console.log(e.keyCode)
         switch (e.keyCode) {
-            case ENTER:
+            case KeyCode.ENTER:
                 talk()
                 break
-            case SPACE:
+            case KeyCode.SPACE:
                 talk()
                 break
-            case KEY_LEFT:
+            case KeyCode.KEY_LEFT:
                 if (player.currentAnimation != 'walkleft')
                     player.gotoAndPlay('walkleft')
                 break
-            case KEY_UP:
+            case KeyCode.KEY_UP:
                 if (player.currentAnimation != 'walkup')
                     player.gotoAndPlay('walkup')
                 break
-            case KEY_RIGHT:
+            case KeyCode.KEY_RIGHT:
                 if (player.currentAnimation != 'walkright')
                     player.gotoAndPlay('walkright')
                 break
-            case KEY_DOWN:
+            case KeyCode.KEY_DOWN:
                 if (player.currentAnimation != 'walkdown')
                     player.gotoAndPlay('walkdown')
                 break
@@ -94,19 +85,19 @@ var init = (repo) => {
 
     var stopWalkAnimation = function(e) {
         switch (e.keyCode) {
-            case KEY_LEFT:
+            case KeyCode.KEY_LEFT:
                 if (player.currentAnimation == 'walkleft')
                     player.gotoAndStop('left')
                 break
-            case KEY_UP:
+            case KeyCode.KEY_UP:
                 if (player.currentAnimation == 'walkup')
                     player.gotoAndStop('up')
                 break
-            case KEY_RIGHT:
+            case KeyCode.KEY_RIGHT:
                 if (player.currentAnimation == 'walkright')
                     player.gotoAndStop('right')
                 break
-            case KEY_DOWN:
+            case KeyCode.KEY_DOWN:
                 if (player.currentAnimation == 'walkdown')
                     player.gotoAndStop('down')
                 break
@@ -118,25 +109,36 @@ var init = (repo) => {
             e = window.event
         }
         switch (e.keyCode) {
-            case KEY_LEFT:
+            case KeyCode.KEY_LEFT:
                 return d[0] = d1
-            case KEY_UP:
+            case KeyCode.KEY_UP:
                 return d[1] = d1
-            case KEY_RIGHT:
+            case KeyCode.KEY_RIGHT:
                 return d[2] = d2
-            case KEY_DOWN:
+            case KeyCode.KEY_DOWN:
                 return d[3] = d2
         }
     }
 
-    document.onkeydown = function(e) {
-        getAction(e)
-        return _setD(e, -1 * speed, speed)
+    var currentPressed = ''
+
+    document.onkeydown = (e) => {
+        console.log('keydown:' + e.keyCode)
+        if (currentPressed == '') {
+            currentPressed = e.keyCode
+            getAction(e)
+            return _setD(e, -1 * speed, speed)
+        }
     }
 
-    document.onkeyup = function(e) {
-        stopWalkAnimation(e)
-        return _setD(e, 0, 0)
+    document.onkeyup = (e) => {
+        console.log('keyup:' + e.keyCode)
+        if (e.keyCode == currentPressed) {
+            currentPressed = ''
+            stopWalkAnimation(e)
+            console.log('player:' + player.x + ', ' + player.y)
+            return _setD(e, 0, 0)
+        }
     }
 
     var wall = {
