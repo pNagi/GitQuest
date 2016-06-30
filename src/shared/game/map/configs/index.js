@@ -19,19 +19,31 @@ export const MAP_TILESET = {
 
 export const FILE_OBJECT = {
     md: {
-        frames: [30*2 + 0, 30*3 + 0],
+        frames: [
+            30 * 2 + 0,
+            30 * 3 + 0
+        ],
         speed: 0.05
     },
     js: {
-        frames: [30*2 + 8, 30*3 + 8],
+        frames: [
+            30 * 2 + 8,
+            30 * 3 + 8
+        ],
         speed: 0.05
     },
     json: {
-        frames: [30*2 + 14, 30*3 + 14],
+        frames: [
+            30 * 2 + 14,
+            30 * 3 + 14
+        ],
         speed: 0.05
     },
     unknown: {
-        frames: [30*42 + 0, 30*43 + 0],
+        frames: [
+            30 * 42 + 0,
+            30 * 43 + 0
+        ],
         speed: 0.05
     }
 }
@@ -45,7 +57,9 @@ export const FILE_TILESET = {
     animations: FILE_OBJECT
 }
 
-export const impassable = [MAP_OBJECT.dir, ...Object.keys(FILE_OBJECT)]
+export const impassable = [
+    MAP_OBJECT.dir, ...Object.keys(FILE_OBJECT)
+]
 
 export const setGround = (tile, row, col) => {
     switch (row % 4) {
@@ -60,6 +74,8 @@ export const setGround = (tile, row, col) => {
             break
         case 3:
             tile.gotoAndStop(col % 4 + 4 + 48);
+            break
+        default:
             break
     }
 

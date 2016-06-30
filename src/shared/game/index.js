@@ -28,8 +28,8 @@ var initStage = () => {
 
 var initPlayer = () => {
     player = Player.init()
-    player.x = (canvas.width - width) / 2
-    player.y = (canvas.height - height) / 2
+    player.x = Math.floor((canvas.width - width) / 2)
+    player.y = Math.floor((canvas.height - height) / 2)
 }
 
 var handleFileLoad = (event) => {
@@ -51,10 +51,10 @@ var loadMap = (user, repo, path) => {
 
 var initMap = (repo) => {
     console.log('init map')
-    map = MapGenerator.init(repo)
+    map = new MapGenerator(repo, canvas.width, canvas.height)
     initActions()
     console.log('add children')
-    stage.addChild(map)
+    stage.addChild(map.getSprite())
     stage.addChild(player)
 
     var infoWindow = new createjs.Container()
@@ -103,6 +103,7 @@ var initActions = () => {
             currentPressed = ''
             PlayerMovement.stopAnimation(e)
             console.log('player:' + player.x + ', ' + player.y)
+            console.log(map.getPath(player.x, player.y))
             return PlayerMovement.setSpeed(e, 0, 0)
         }
     }

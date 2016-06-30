@@ -1,11 +1,11 @@
 import * as KeyCode from 'shared/game/constants/keyCodes'
 export const SPEED = 3
 
-var player, wall
+var player, map
 
-exports.init = (p, w) => {
+exports.init = (p, m) => {
     player = p
-    wall = w
+    map = m
 }
 
 exports.talk = (e) => {
@@ -80,19 +80,13 @@ exports.setSpeed = (e, inverse, direct) => {
 }
 
 exports.move = () => {
-    player.x += d[0] + d[2]
-    if (player.x < wall.left) {
-        player.x = wall.left
-    }
-    if (player.x > wall.right) {
-        player.x = wall.right
-    }
+    var x = player.x
+    var y = player.y
 
+    player.x += d[0] + d[2]
     player.y += d[1] + d[3]
-    if (player.y < wall.bottom) {
-        player.y = wall.bottom
-    }
-    if (player.y > wall.top) {
-        player.y = wall.top
+    if (!map.passable(player.x, player.y)) {
+        player.x = x
+        player.y = y
     }
 }
