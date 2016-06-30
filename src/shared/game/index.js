@@ -1,178 +1,119 @@
 import Player from 'shared/game/player'
+import * as PlayerMovement from 'shared/game/player/movement'
 import MapGenerator from 'shared/game/map'
-import * as KeyCode from 'shared/game/constants/keyCodes'
+import * as API from 'shared/game/constants/API'
 
-var speed = 3
-var width = 32
-var height = 32
+var speed = 3,
+    width = 32,
+    height = 32,
+    canvas,
+    stage,
+    player,
+    map
 
 exports.start = (user, repo, path = '') => {
+    initStage()
+    initPlayer()
     loadMap(user, repo, path)
 }
 
-var base = 'https://api.github.com/repos/'
+var initStage = () => {
+    canvas = document.getElementById('canvas')
+    canvas.width = window.innerWidth - 16;
+    canvas.height = window.innerHeight * 3/4 - 16;
 
-var getUrl = (user, repo, path) => {
-    return base + user + '/' + repo + '/contents/' + path
+    stage = new createjs.Stage(canvas)
+    stage.snapToPixelEnabled = true;
+}
+
+var initPlayer = () => {
+    player = Player.init()
+    player.x = (canvas.width - width) / 2
+    player.y = (canvas.height - height) / 2
 }
 
 var handleFileLoad = (event) => {
-    console.log(event.result)
-    init(event.result)
+    console.log('handle file load')
+    initMap(event.result)
 }
 
-var handleComplete = (event) => {}
-
 var loadMap = (user, repo, path) => {
+    console.log('load map')
     var queue = new createjs.LoadQueue()
     queue.on('fileload', handleFileLoad, this)
-    queue.on('complete', handleComplete, this)
     queue.loadFile({
-        src: getUrl(user, repo, path),
+        src: API.getUrl(user, repo, path),
         type: createjs.AbstractLoader.JSON
     })
 
     queue.load()
 }
 
-var init = (repo) => {
-    var canvas = document.getElementById('canvas')
+var initMap = (repo) => {
+    console.log('init map')
+    map = MapGenerator.init(repo)
+    initActions()
+    console.log('add children')
+    stage.addChild(map)
+    stage.addChild(player)
 
-    canvas.width = window.innerWidth - 16;
-    // canvas.height = window.innerHeight - 16;
+    var infoWindow = new createjs.Container()
 
-    var stage = new createjs.Stage(canvas)
+    var rect = new createjs.Shape()
+    rect.graphics.beginFill('#776787')
+    rect.graphics.drawRoundRect(0, 0, canvas.width - 30, canvas.height / 4, 5)
+    rect.graphics.endFill()
+    rect.alpha = 0.5
+    rect.x = -20
+    rect.y = -10
 
-    var player = Player.init()
-    player.x = (canvas.width - width) / 2
-    player.y = (canvas.height - height) / 2
+    infoWindow.x = 35
+    infoWindow.y = (canvas.height * 3/4)
 
-    var map = MapGenerator.init(repo)
+    var text = new createjs.Text('Hello World', '15px Arial', '#fff')
+    text.textBaseline = 'alphabetic'
+    text.y = 15
 
+    infoWindow.addChild(rect)
+    infoWindow.addChild(text)
+    stage.addChild(infoWindow)
+
+    infoWindow.visible = false
+
+    PlayerMovement.init(player, map)
+
+    stage.update()
+}
+
+var initActions = () => {
     var d = [0, 0, 0, 0]
-
-    var talk = () => {
-        console.log('talk')
-        loadMap('pnagi', 'Lecture', 'Algorithm')
-    }
-
-    var getAction = function(e) {
-        switch (e.keyCode) {
-            case KeyCode.ENTER:
-                talk()
-                break
-            case KeyCode.SPACE:
-                talk()
-                break
-            case KeyCode.KEY_LEFT:
-                if (player.currentAnimation != 'walkleft')
-                    player.gotoAndPlay('walkleft')
-                break
-            case KeyCode.KEY_UP:
-                if (player.currentAnimation != 'walkup')
-                    player.gotoAndPlay('walkup')
-                break
-            case KeyCode.KEY_RIGHT:
-                if (player.currentAnimation != 'walkright')
-                    player.gotoAndPlay('walkright')
-                break
-            case KeyCode.KEY_DOWN:
-                if (player.currentAnimation != 'walkdown')
-                    player.gotoAndPlay('walkdown')
-                break
-        }
-    }
-
-    var stopWalkAnimation = function(e) {
-        switch (e.keyCode) {
-            case KeyCode.KEY_LEFT:
-                if (player.currentAnimation == 'walkleft')
-                    player.gotoAndStop('left')
-                break
-            case KeyCode.KEY_UP:
-                if (player.currentAnimation == 'walkup')
-                    player.gotoAndStop('up')
-                break
-            case KeyCode.KEY_RIGHT:
-                if (player.currentAnimation == 'walkright')
-                    player.gotoAndStop('right')
-                break
-            case KeyCode.KEY_DOWN:
-                if (player.currentAnimation == 'walkdown')
-                    player.gotoAndStop('down')
-                break
-        }
-    }
-
-    var _setD = function(e, d1, d2) {
-        if (!e) {
-            e = window.event
-        }
-        switch (e.keyCode) {
-            case KeyCode.KEY_LEFT:
-                return d[0] = d1
-            case KeyCode.KEY_UP:
-                return d[1] = d1
-            case KeyCode.KEY_RIGHT:
-                return d[2] = d2
-            case KeyCode.KEY_DOWN:
-                return d[3] = d2
-        }
-    }
 
     var currentPressed = ''
 
     document.onkeydown = (e) => {
-        console.log('keydown:' + e.keyCode)
         if (currentPressed == '') {
             currentPressed = e.keyCode
-            getAction(e)
-            return _setD(e, -1 * speed, speed)
+            PlayerMovement.playAnimation(e)
+            return PlayerMovement.setSpeed(e, -1 * PlayerMovement.SPEED, PlayerMovement.SPEED)
         }
     }
 
     document.onkeyup = (e) => {
-        console.log('keyup:' + e.keyCode)
         if (e.keyCode == currentPressed) {
             currentPressed = ''
-            stopWalkAnimation(e)
+            PlayerMovement.stopAnimation(e)
             console.log('player:' + player.x + ', ' + player.y)
-            return _setD(e, 0, 0)
+            return PlayerMovement.setSpeed(e, 0, 0)
         }
     }
 
-    var wall = {
-        left: 0,
-        top: canvas.height - height,
-        right: canvas.width - width,
-        bottom: 0
-    }
-
-    window.tick = function() {
-        player.x += d[0] + d[2]
-        if (player.x < wall.left) {
-            player.x = wall.left
-        }
-        if (player.x > wall.right) {
-            player.x = wall.right
-        }
-
-        player.y += d[1] + d[3]
-        if (player.y < wall.bottom) {
-            player.y = wall.bottom
-        }
-        if (player.y > wall.top) {
-            player.y = wall.top
-        }
+    var tick = () => {
+        PlayerMovement.move()
 
         return stage.update()
     }
 
-    createjs.Ticker.addEventListener('tick', window.tick)
+    createjs.Ticker.addEventListener('tick', tick)
     createjs.Ticker.useRAF = true
     createjs.Ticker.setFPS(60)
-
-    stage.addChild(map)
-    stage.addChild(player)
-    stage.update()
 }

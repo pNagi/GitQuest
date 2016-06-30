@@ -11,7 +11,6 @@ class App extends Component {
             <div>
                 <div id="in-app" className="container">
                     <div className="row">
-                        App
                         {this.props.children}
                     </div>
                 </div>

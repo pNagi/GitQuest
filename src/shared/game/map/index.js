@@ -4,14 +4,15 @@ exports.init = (repo) => {
 
     var size = Config.SIZE
     var map = new createjs.Container()
-    var tileset = new createjs.SpriteSheet(Config.TILESET)
+    var mapTileset = new createjs.SpriteSheet(Config.MAP_TILESET)
+    var fileTileset = new createjs.SpriteSheet(Config.FILE_TILESET)
 
     var mapWidth = canvas.width
     var mapHeight = canvas.height
 
     for (var row = 0; row < mapHeight / size ; row++) {
         for (var col = 0; col < mapWidth / size ; col++) {
-            var tile = new createjs.Sprite(tileset);
+            var tile = new createjs.Sprite(mapTileset);
             Config.setGround(tile, row, col)
             map.addChild(tile);
         }
@@ -25,13 +26,17 @@ exports.init = (repo) => {
 
         switch (item.type) {
             case 'dir':
-                itemSprite = new createjs.Sprite(tileset, 'dir')
+                itemSprite = new createjs.Sprite(mapTileset, 'dir')
                 break
             case 'file':
-                itemSprite = new createjs.Sprite(tileset, 'file')
+                var name = item.name.split('.').pop()
+                if (!Config.FILE_OBJECT.hasOwnProperty(name)) {
+                    name = 'unknown'
+                }
+                itemSprite = new createjs.Sprite(fileTileset, name)
                 break
             default:
-                itemSprite = new createjs.Sprite(tileset, 'unknown')
+                itemSprite = new createjs.Sprite(fileTileset, 'unknown')
                 break
         }
 
@@ -43,9 +48,6 @@ exports.init = (repo) => {
         if (size * ((2 * n[0]) + 3) > mapWidth) {
             n[0] = 0
             n[1]++
-        }
-        if (size * ((2 * n[1]) + 3) > mapHeight) {
-            n[0] = 0
         }
 
         map.addChild(itemSprite)

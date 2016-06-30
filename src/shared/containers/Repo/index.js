@@ -15,15 +15,13 @@ class Repo extends Component {
     render() {
         return (
             <div>
-                User {this.props.params.user}
-                / Repo {this.props.params.repo}
-                / Path {this.props.params.path}
-
                 <div id='repo' className='col-md-12'>
-                    <canvas id='canvas' width={900} height={400} style={{
-                        backgroundColor: '#eee'
-                    }}></canvas>
+                    <canvas id='canvas'></canvas>
                 </div>
+                <p>User: {this.props.params.user}</p>
+                <p>Repo: {this.props.params.repo}</p>
+                <p>Path: {this.props.params.path}</p>
+
             </div>
         )
     }
