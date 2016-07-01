@@ -1,7 +1,7 @@
 import * as Config from 'shared/game/map/configs'
 
 export default class MapGenerator {
-    constructor(repo, width, height) {
+    constructor(repo, width, height, backRoute) {
         this.size = Config.SIZE
         this.map = new createjs.Container()
         this.mapTileset = new createjs.SpriteSheet(Config.MAP_TILESET)
@@ -9,8 +9,8 @@ export default class MapGenerator {
 
         this.grid = []
 
-        this.maxRow = Math.floor(height / this.size)
-        this.maxCol = Math.floor(width / this.size)
+        this.maxRow = Math.ceil(height / this.size)
+        this.maxCol = Math.ceil(width / this.size)
 
         for (var row = 0; row < this.maxRow ; row++) {
             this.grid[row] = new Array()
@@ -28,6 +28,20 @@ export default class MapGenerator {
         console.log('total row: ' + this.grid.length + ', total col: ' + this.grid[0].length)
 
         var n = [0, 0]
+
+        if (backRoute != '') {
+            var itemSprite = new createjs.Sprite(this.mapTileset, 'dir')
+            this.grid[1][1][1] = backRoute.split('/').slice(0, -1).join('/')
+
+            itemSprite.set({
+                x: this.size,
+                y: this.size
+            });
+
+            this.map.addChild(itemSprite)
+
+            n[0]++
+        }
 
         repo.forEach(function(item) {
 

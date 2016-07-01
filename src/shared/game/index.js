@@ -9,11 +9,14 @@ var speed = 3,
     canvas,
     stage,
     player,
-    map
+    map,
+    infoWindow,
+    user,
+    repo,
+    path
 
 exports.start = (user, repo, path = '') => {
     initStage()
-    initPlayer()
     loadMap(user, repo, path)
 }
 
@@ -37,7 +40,10 @@ var handleFileLoad = (event) => {
     initMap(event.result)
 }
 
-var loadMap = (user, repo, path) => {
+var loadMap = (u, r, p) => {
+    user = u
+    repo = r
+    path = p
     console.log('load map')
     var queue = new createjs.LoadQueue()
     queue.on('fileload', handleFileLoad, this)
@@ -50,14 +56,28 @@ var loadMap = (user, repo, path) => {
 }
 
 var initMap = (repo) => {
-    console.log('init map')
-    map = new MapGenerator(repo, canvas.width, canvas.height)
+
+    stage.removeAllChildren()
+    createjs.Ticker.removeAllEventListeners();
+
+    initPlayer()
+
+    map = new MapGenerator(repo, canvas.width, canvas.height, path)
+
     initActions()
-    console.log('add children')
+    initWindow()
+
     stage.addChild(map.getSprite())
     stage.addChild(player)
+    stage.addChild(infoWindow)
 
-    var infoWindow = new createjs.Container()
+    PlayerMovement.init(player, map)
+
+    stage.update()
+}
+
+var initWindow = () => {
+    infoWindow = new createjs.Container()
 
     var rect = new createjs.Shape()
     rect.graphics.beginFill('#776787')
@@ -70,19 +90,14 @@ var initMap = (repo) => {
     infoWindow.x = 35
     infoWindow.y = (canvas.height * 3/4)
 
-    var text = new createjs.Text('Hello World', '15px Arial', '#fff')
+    var text = new createjs.Text(user + ' ' + repo + ' ' + path, '15px Arial', '#fff')
     text.textBaseline = 'alphabetic'
     text.y = 15
 
     infoWindow.addChild(rect)
     infoWindow.addChild(text)
-    stage.addChild(infoWindow)
 
-    infoWindow.visible = false
-
-    PlayerMovement.init(player, map)
-
-    stage.update()
+    // infoWindow.visible = false
 }
 
 var initActions = () => {
@@ -91,7 +106,10 @@ var initActions = () => {
     var currentPressed = ''
 
     document.onkeydown = (e) => {
-        if (currentPressed == '') {
+        if (e.keyCode == 13) {
+            loadMap('pnagi', 'Lecture', map.getPath(player.x, player.y))
+        }
+        else if (currentPressed == '') {
             currentPressed = e.keyCode
             PlayerMovement.playAnimation(e)
             return PlayerMovement.setSpeed(e, -1 * PlayerMovement.SPEED, PlayerMovement.SPEED)
