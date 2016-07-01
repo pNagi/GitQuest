@@ -1,86 +1,117 @@
 import * as Config from 'shared/game/map/configs'
 
 export default class MapGenerator {
-    constructor(repo, width, height, backRoute) {
+
+    constructor(repo, width, height, path) {
         this.size = Config.SIZE
         this.map = new createjs.Container()
         this.mapTileset = new createjs.SpriteSheet(Config.MAP_TILESET)
         this.fileTileset = new createjs.SpriteSheet(Config.FILE_TILESET)
 
-        this.grid = []
-
         this.maxRow = Math.ceil(height / this.size)
         this.maxCol = Math.ceil(width / this.size)
 
+        this.createGrid()
+
+        this.map.addChild(this.createGroundLayer())
+
+        this.placeObjects(repo, path)
+    }
+
+    createGrid() {
+        this.grid = new Array()
         for (var row = 0; row < this.maxRow ; row++) {
             this.grid[row] = new Array()
             for (var col = 0; col < this.maxCol ; col++) {
                 this.grid[row][col] = new Array()
                 this.grid[row][col][0] = true
                 this.grid[row][col][1] = ''
+            }
+        }
+    }
 
+    createGroundLayer() {
+        var groundLayer = new createjs.Container()
+
+        for (var row = 0; row < this.maxRow ; row++) {
+            for (var col = 0; col < this.maxCol ; col++) {
                 var tile = new createjs.Sprite(this.mapTileset);
                 Config.setGround(tile, row, col)
-                this.map.addChild(tile);
+                groundLayer.addChild(tile);
             }
         }
 
-        console.log('total row: ' + this.grid.length + ', total col: ' + this.grid[0].length)
+        return groundLayer
+    }
 
-        var n = [0, 0]
+    createDir() {
+        return new createjs.Sprite(this.mapTileset, 'dir')
+    }
 
-        if (backRoute != '') {
-            var itemSprite = new createjs.Sprite(this.mapTileset, 'dir')
-            this.grid[1][1][1] = backRoute.split('/').slice(0, -1).join('/')
+    createFile(name) {
+        var fileType = name.split('.').pop()
+        if (!Config.FILE_OBJECT.hasOwnProperty(fileType)) {
+            fileType = 'unknown'
+        }
 
-            itemSprite.set({
-                x: this.size,
-                y: this.size
-            });
+        return new createjs.Sprite(this.fileTileset, fileType)
+    }
 
-            this.map.addChild(itemSprite)
+    createUnknown() {
+        return new createjs.Sprite(this.fileTileset, 'unknown')
+    }
 
-            n[0]++
+    createItemSprite(type, name, path, col, row) {
+        var itemSprite
+
+        switch (type) {
+            case 'dir':
+                itemSprite = this.createDir()
+                this.grid[row][col][1] = path
+                break
+            case 'file':
+                itemSprite = this.createFile(name)
+                this.grid[row][col][0] = false
+                break
+            default:
+                itemSprite = this.createUnknown()
+                break
+        }
+
+        itemSprite.set({
+            x: col * this.size,
+            y: row * this.size
+        });
+
+        this.map.addChild(itemSprite)
+    }
+
+    getParentPath(path) {
+        return path.split('/').slice(0, -1).join('/')
+    }
+
+    placeObjects(repo, path) {
+
+        var xIndex = 0
+        var yIndex = 0
+
+        if (path != '') {
+            var col = ((2 * xIndex++) + 1)
+            var row = ((2 * yIndex) + 1)
+
+            this.createItemSprite('dir', 'back', this.getParentPath(path), col, row)
         }
 
         repo.forEach(function(item) {
+            var col = ((2 * xIndex++) + 1)
+            var row = ((2 * yIndex) + 1)
 
-            var itemSprite
-
-            var col = ((2 * n[0]++) + 1)
-            var row = ((2 * n[1]) + 1)
-            console.log(col, row)
-
-            switch (item.type) {
-                case 'dir':
-                    itemSprite = new createjs.Sprite(this.mapTileset, 'dir')
-                    this.grid[row][col][1] = item.path
-                    console.log(item.path)
-                    break
-                case 'file':
-                    var name = item.name.split('.').pop()
-                    if (!Config.FILE_OBJECT.hasOwnProperty(name)) {
-                        name = 'unknown'
-                    }
-                    itemSprite = new createjs.Sprite(this.fileTileset, name)
-                    this.grid[row][col][0] = false
-                    break
-                default:
-                    itemSprite = new createjs.Sprite(this.fileTileset, 'unknown')
-                    break
-            }
-
-            itemSprite.set({
-                x: this.size * col - 2,
-                y: this.size * row + 4
-            });
+            this.createItemSprite(item.type, item.name, item.path, col, row)
 
             if (col + 3 > this.maxCol) {
-                n[0] = 0
-                n[1]++
+                xIndex = 0
+                yIndex++
             }
-
-            this.map.addChild(itemSprite)
         }, this)
     }
 
@@ -88,25 +119,32 @@ export default class MapGenerator {
         return this.map
     }
 
+    isOutOfBound(x, y) {
+        return (x < 0 || x >= (this.maxCol - 1) * this.size || y < 0 || y >= (this.maxRow - 1) * this.size)
+    }
+
+    getIndex(pos) {
+        return Math.floor((pos + 16) / this.size)
+    }
+
     getPath(x, y) {
-        if (x < 0 || x >= (this.maxCol - 1) * this.size || y < 0 || y >= (this.maxRow - 1) * this.size) {
+        if (this.isOutOfBound(x, y)) {
             return ''
         }
 
-        var col = Math.floor((x + 16) / this.size)
-        var row = Math.floor((y + 16) / this.size)
+        var col = this.getIndex(x)
+        var row = this.getIndex(y)
 
         return this.grid[row][col][1]
     }
 
     passable(x, y) {
-        if (x < 0 || x >= (this.maxCol - 1) * this.size || y < 0 || y >= (this.maxRow - 1) * this.size) {
-            console.log('out of map')
+        if (this.isOutOfBound(x, y)) {
             return false
         }
 
-        var col = Math.floor((x + 16) / this.size)
-        var row = Math.floor((y + 16) / this.size)
+        var col = this.getIndex(x)
+        var row = this.getIndex(y)
 
         return this.grid[row][col][0]
     }

@@ -112,7 +112,7 @@ var initActions = () => {
         else if (currentPressed == '') {
             currentPressed = e.keyCode
             PlayerMovement.playAnimation(e)
-            return PlayerMovement.setSpeed(e, -1 * PlayerMovement.SPEED, PlayerMovement.SPEED)
+            PlayerMovement.setSpeed(e, -1 * PlayerMovement.SPEED, PlayerMovement.SPEED)
         }
     }
 
@@ -122,7 +122,8 @@ var initActions = () => {
             PlayerMovement.stopAnimation(e)
             console.log('player:' + player.x + ', ' + player.y)
             console.log(map.getPath(player.x, player.y))
-            return PlayerMovement.setSpeed(e, 0, 0)
+
+            PlayerMovement.setSpeed(e, 0, 0)
         }
     }
 
