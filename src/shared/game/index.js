@@ -41,6 +41,8 @@ var handleFileLoad = (event) => {
 }
 
 var loadMap = (u, r, p) => {
+    if (p == null) return
+
     user = u
     repo = r
     path = p
@@ -107,6 +109,7 @@ var initActions = () => {
 
     document.onkeydown = (e) => {
         if (e.keyCode == 13) {
+            console.log(map.getPath(player.x, player.y))
             loadMap('pnagi', 'Lecture', map.getPath(player.x, player.y))
         }
         else if (currentPressed == '') {

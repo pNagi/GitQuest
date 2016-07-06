@@ -25,7 +25,7 @@ export default class MapGenerator {
             for (var col = 0; col < this.maxCol ; col++) {
                 this.grid[row][col] = new Array()
                 this.grid[row][col][0] = true
-                this.grid[row][col][1] = ''
+                this.grid[row][col][1] = null
             }
         }
     }
@@ -129,7 +129,7 @@ export default class MapGenerator {
 
     getPath(x, y) {
         if (this.isOutOfBound(x, y)) {
-            return ''
+            return null
         }
 
         var col = this.getIndex(x)

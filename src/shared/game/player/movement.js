@@ -9,7 +9,7 @@ exports.init = (p, m) => {
 }
 
 exports.talk = (e) => {
-    loadMap('pnagi', 'Lecture', 'Algorithm')
+
 }
 
 exports.playAnimation = (e) => {
