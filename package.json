@@ -15,6 +15,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.9.0",
+    "bluebird": "^3.4.1",
     "bootstrap-loader": "^1.0.10",
     "bootstrap-sass": "^3.3.6",
     "css-loader": "^0.23.1",

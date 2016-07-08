@@ -18,10 +18,6 @@ class Repo extends Component {
                 <div id='repo' className='col-md-12'>
                     <canvas id='canvas'></canvas>
                 </div>
-                <p>User: {this.props.params.user}</p>
-                <p>Repo: {this.props.params.repo}</p>
-                <p>Path: {this.props.params.path}</p>
-
             </div>
         )
     }
