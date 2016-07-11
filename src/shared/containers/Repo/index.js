@@ -4,7 +4,7 @@ import Game from 'shared/game'
 class Repo extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     componentDidMount() {

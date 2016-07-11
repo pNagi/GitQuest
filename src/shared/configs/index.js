@@ -13,8 +13,8 @@ const environment = {
         apiHost: process.env.APIHOST || 'localhost',
         apiPort: process.env.APIPORT || 80
     }
-}[process.env.NODE_ENV || 'development'];
+}[process.env.NODE_ENV || 'development']
 
 export default {
     ...environment
-};
+}
