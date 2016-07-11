@@ -1,25 +1,11 @@
-export default class MapGenerator {
+import TileGameObject from 'shared/game/components/TileGameObject'
 
-    // constructor(repo, width, height, path) {
-    //     this.size = Config.SIZE
-    //     this.map = new createjs.Container()
-    //     this.mapTileset = new createjs.SpriteSheet(Config.MAP_TILESET)
-    //     this.fileTileset = new createjs.SpriteSheet(Config.FILE_TILESET)
-    //
-    //     this.maxRow = Math.ceil(height / this.size)
-    //     this.maxCol = Math.ceil(width / this.size)
-    //
-    //     this.createGrid()
-    //
-    //     this.map.addChild(this.createGroundLayer())
-    //
-    //     this.placeObjects(repo, path)
-    // }
+export default class MapGenerator {
 
     constructor(width, height) {
         this.size = 16
-        this.numberOfRows = Math.ceil(height / this.size)
         this.numberOfCols = Math.ceil(width / this.size)
+        this.numberOfRows = Math.ceil(height / this.size)
         this._createGrid()
         this._createSprite()
     }
@@ -36,12 +22,22 @@ export default class MapGenerator {
 
     _createSprite() {
         this._map = new createjs.Container()
+        this._ground = new createjs.Container()
+        this._objects = new createjs.Container()
+
+        this._map.addChild(this._ground)
+        this._map.addChild(this._objects)
+    }
+
+    set ground(ground) {
+        console.log(ground)
+        this._ground.addChild(ground.sprite)
     }
 
     place(col, row, gameObject) {
         try {
             this._placeOnGrid(col, row, gameObject.grid)
-            this._placeOnSprite(col, row, gameObject.sprite)
+            this._placeOnContainer(col, row, gameObject.sprite)
         } catch(err) {
             console.log(err)
             return false
@@ -72,10 +68,10 @@ export default class MapGenerator {
         }
     }
 
-    _placeOnSprite(col, row, gameObjectSprite) {
+    _placeOnContainer(col, row, gameObjectSprite) {
         gameObjectSprite.x = col * this.size
         gameObjectSprite.y = row * this.size
-        this._map.addChild(gameObjectSprite)
+        this._objects.addChild(gameObjectSprite)
     }
 
     get sprite() {

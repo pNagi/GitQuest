@@ -28,8 +28,8 @@ class GameEngine {
     constructor() {
         this._createCanvas()
         this._createStage()
-        this._createMap()
         this._createFactory()
+        this._createMap()
     }
 
     _createCanvas() {
@@ -45,15 +45,18 @@ class GameEngine {
         this.stage.snapToPixelEnabled = true;
     }
 
-    _createMap() {
-        this.map = new MapGenerator(this.canvas.width, this.canvas.height)
-    }
-
     _createFactory() {
         this.factory = new Factory()
     }
 
+    _createMap() {
+        this.map = new MapGenerator(this.canvas.width, this.canvas.height)
+        this.map.ground = this.factory.createTileGameObject('ground', this.canvas.width, this.canvas.height)
+    }
+
     loadMap(user, repo, path) {
+        this._clearStage()
+
         var queue = new createjs.LoadQueue()
         queue.on('fileload', this._handleFileLoad, this)
         queue.on('complete', this._handleComplete, this)
@@ -65,25 +68,38 @@ class GameEngine {
         queue.load()
     }
 
-    _handleComplete(event) {
-        console.log('handle complete')
-        console.log(event)
+    _clearStage() {
+        this.stage.removeAllChildren()
+        createjs.Ticker.removeAllEventListeners();
+    }
+
+    _addMapToStage() {
         this.stage.addChild(this.map.sprite)
         this.stage.update()
+
+        var tick = () => {
+            return this.stage.update()
+        }
+
+        createjs.Ticker.addEventListener('tick', tick)
+        createjs.Ticker.useRAF = true
+        createjs.Ticker.setFPS(60)
+    }
+
+    _createObjects(repo) {
+        repo.forEach(function(entry) {
+            this.map.placeRandomly(this.factory.createGameObject(entry))
+        }, this)
+    }
+
+    _handleComplete(event) {
+        console.log('handle complete')
+        this._addMapToStage()
     }
 
     _handleFileLoad(event) {
         console.log('handle file load')
-        console.log(event.result)
-
-        var repo = event.result
-
-        this.stage.removeAllChildren()
-        createjs.Ticker.removeAllEventListeners();
-
-        repo.forEach(function(entry) {
-            this.map.placeRandomly(this.factory.create(entry))
-        }, this)
+        this._createObjects(event.result)
     }
 }
 
