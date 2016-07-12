@@ -39,7 +39,8 @@ class GameEngine {
     }
 
     _createMap() {
-        var SCALE = 1.5
+        //bad code
+        var SCALE = 1
         this.map = new MapGenerator(this.canvas.width * SCALE, this.canvas.height * SCALE, this.canvas.width, this.canvas.height)
         this.map.ground = this.factory.createTileGameObject('ground', this.canvas.width * SCALE / 16, this.canvas.height * SCALE / 16)
     }

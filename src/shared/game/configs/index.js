@@ -40,7 +40,12 @@ export const getFrontObjectOf = (number) => {
 export const PLAYER = getFrontPlayerOf(1)
 
 export const FILE_TYPE = {
-    dir: getFrontObjectOf(1),
+    dir: [
+        [null, 'd-1', 'd-2', 'd-3', null],
+        ['e-l-1', 'd-4', 'd-5', 'd-6', 'e-r-1'],
+        ['e-l-2', 'd-7', 'd-8', 'd-9', 'e-r-2'],
+        [null, 'd-10', 'd-11', 'd-12', null]
+    ],
     md: getFrontObjectOf(3),
     js: getFrontObjectOf(6),
     json: getFrontObjectOf(7),
@@ -119,8 +124,30 @@ var _createPlayerAnimations = (initial, width, height, size, name) => {
 _createAnimations(0, 960, 1408, 16, 'o')
 _createPlayerAnimations(10178, 800, 600, 16, 'p')
 
-animations.ground = 12 + (62 * 26) - 1 + 5280
-animations.temp = 10178
+var getPostionOnMapTileset = (col, row) => {
+    return col + (row * 62) - 1 + 5280
+}
+
+animations.ground = getPostionOnMapTileset(12, 1)
+
+animations['d-1'] = getPostionOnMapTileset(22, 25)
+animations['d-2'] = getPostionOnMapTileset(23, 25)
+animations['d-3'] = getPostionOnMapTileset(24, 25)
+animations['d-4'] = getPostionOnMapTileset(22, 26)
+animations['d-5'] = getPostionOnMapTileset(23, 26)
+animations['d-6'] = getPostionOnMapTileset(24, 26)
+animations['d-7'] = getPostionOnMapTileset(22, 27)
+animations['d-8'] = getPostionOnMapTileset(23, 27)
+animations['d-9'] = getPostionOnMapTileset(24, 27)
+animations['d-10'] = getPostionOnMapTileset(22, 28)
+animations['d-11'] = getPostionOnMapTileset(23, 28)
+animations['d-12'] = getPostionOnMapTileset(24, 28)
+
+animations['e-r-1'] = getPostionOnMapTileset(25, 31)
+animations['e-r-2'] = getPostionOnMapTileset(25, 32)
+
+animations['e-l-1'] = getPostionOnMapTileset(27, 31)
+animations['e-l-2'] = getPostionOnMapTileset(27, 32)
 
 export const TILESET = {
     images: [
