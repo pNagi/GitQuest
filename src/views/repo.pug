@@ -9,7 +9,7 @@ html
         a(href="/") Back
         canvas#canvas_id(width='800', height='500', style='display: table; width: 100%; height: 100%;')
         script.
-            var repo = !{JSON.stringify(repo)}
+            let repo = !{JSON.stringify(repo)}
         script(src='/canvasengine-1.3.2.all.min.js')
         script(src='/rpgjs-2.0.0.js')
         script(src='/game.js')

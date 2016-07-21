@@ -1,11 +1,20 @@
 import GameObject from 'shared/game/components/GameObject'
+import Factory from 'shared/game/factory'
 
 import * as Config from 'shared/game/configs'
 
 export default class Player extends GameObject {
 
-    constructor(spriteSheet, grid) {
-        super(spriteSheet, grid)
+    constructor() {
+        super(Factory.getSpriteSheet(), Factory.getPlayerGrid(), 'player')
+    }
+
+    static getInstance() {
+        if (typeof this._player === 'undefined') {
+            this._player = new Player()
+        }
+
+        return this._player
     }
 
     walkUp() {

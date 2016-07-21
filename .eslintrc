@@ -1,7 +1,7 @@
 {
-    "parser": "babel-eslint",
-        "rules": {
-        "quotes": ["error", "single"],
-        "indent": ["error", 4, {"SwitchCase": 1}]
+    parser: 'babel-eslint',
+    rules: {
+        quotes: ['error', 'single'],
+        indent: ['error', 4, {SwitchCase: 1}]
     }
 }

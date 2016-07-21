@@ -1,14 +1,12 @@
-// import Player from 'shared/game/player'
-// import * as PlayerMovement from 'shared/game/player/movement'
+import Player from 'shared/game/player'
 import * as KeyCode from 'shared/game/constants/keyCodes'
 import * as API from 'shared/game/constants/API'
 
-// import Promise from 'bluebird'
 import Factory from 'shared/game/factory'
 import MapGenerator from 'shared/game/map'
 
 exports.start = (user, repo, path = '') => {
-    var gameEngine = new GameEngine()
+    let gameEngine = new GameEngine()
     gameEngine.loadMap(user, repo, path)
 }
 
@@ -16,9 +14,7 @@ class GameEngine {
     constructor() {
         this._createCanvas()
         this._createStage()
-        this._createFactory()
         this._createMap()
-        this._createPlayer()
     }
 
     _createCanvas() {
@@ -28,32 +24,20 @@ class GameEngine {
     }
 
     _createStage() {
-        if (this.canvas == null)
+        if (this.canvas === null)
             throw 'Canvas not found'
         this.stage = new createjs.Stage(this.canvas)
         this.stage.snapToPixelEnabled = true
     }
 
-    _createFactory() {
-        this.factory = new Factory()
-    }
-
     _createMap() {
-        //bad code
-        var SCALE = 1
-        this.map = new MapGenerator(this.canvas.width * SCALE, this.canvas.height * SCALE, this.canvas.width, this.canvas.height)
-        this.map.ground = this.factory.createTileGameObject('ground', this.canvas.width * SCALE / 16, this.canvas.height * SCALE / 16)
-    }
-
-    _createPlayer() {
-        this.player = this.factory.createPlayer()
-        this.map.placePlayer(this.player)
+        this.map = new MapGenerator(this.canvas.width, this.canvas.height)
     }
 
     loadMap(user, repo, path) {
         this._clearStage()
 
-        var queue = new createjs.LoadQueue()
+        let queue = new createjs.LoadQueue()
         queue.on('fileload', this._handleFileLoad, this)
         queue.on('complete', this._handleComplete, this)
         queue.loadFile({
@@ -75,7 +59,7 @@ class GameEngine {
     }
 
     _enableStage() {
-        var tick = () => {
+        let tick = () => {
             this.map.translate()
             return this.stage.update()
         }
@@ -84,13 +68,13 @@ class GameEngine {
         createjs.Ticker.useRAF = true
         createjs.Ticker.setFPS(60)
 
-        var SPEED = 3
+        let SPEED = 3
 
-        var currentPressed = ''
+        let currentPressed = ''
 
         document.onkeydown = (e) => {
 
-            if (currentPressed == '') {
+            if (currentPressed === '') {
                 currentPressed = e.keyCode
 
                 switch (e.keyCode) {
@@ -99,19 +83,19 @@ class GameEngine {
                     case KeyCode.SPACE:
                         break
                     case KeyCode.KEY_LEFT:
-                        this.player.walkLeft()
+                        Player.getInstance().walkLeft()
                         this.map.setHorizontalSpeed(-1 * SPEED)
                         break
                     case KeyCode.KEY_UP:
-                        this.player.walkUp()
+                        Player.getInstance().walkUp()
                         this.map.setVerticalSpeed(-1 * SPEED)
                         break
                     case KeyCode.KEY_RIGHT:
-                        this.player.walkRight()
+                        Player.getInstance().walkRight()
                         this.map.setHorizontalSpeed(SPEED)
                         break
                     case KeyCode.KEY_DOWN:
-                        this.player.walkDown()
+                        Player.getInstance().walkDown()
                         this.map.setVerticalSpeed(SPEED)
                         break
                 }
@@ -119,7 +103,7 @@ class GameEngine {
         }
 
         document.onkeyup = (e) => {
-            if (e.keyCode == currentPressed) {
+            if (e.keyCode === currentPressed) {
                 currentPressed = ''
                 this.map.setHorizontalSpeed(0)
                 this.map.setVerticalSpeed(0)
@@ -129,7 +113,7 @@ class GameEngine {
 
     _createObjects(repo) {
         repo.forEach(function(entry) {
-            this.map.placeObjectRandomly(this.factory.createGameObject(entry))
+            this.map.placeObjectRandomly(Factory.createGameObject(entry))
         }, this)
     }
 

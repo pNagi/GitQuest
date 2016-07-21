@@ -5,34 +5,38 @@ import Player from 'shared/game/player'
 
 export default class Factory {
 
-    constructor() {
-        this.spriteSheet = new createjs.SpriteSheet(Config.TILESET)
+    static getSpriteSheet() {
+        if (typeof this.spriteSheet === 'undefined') {
+            this.spriteSheet = new createjs.SpriteSheet(Config.TILESET)
+        }
+
+        return this.spriteSheet
     }
 
-    createPlayer() {
-        return new Player(this.spriteSheet, Config.PLAYER)
+    static getPlayerGrid() {
+        return Config.PLAYER
     }
 
-    createGameObject(repo) {
+    static createGameObject(repo) {
 
-        var type = repo.type
+        let type = repo.type
 
-        if (type == 'file') {
+        if (type === 'file') {
             type = repo.name.split('.').pop()
         }
 
         if (Config.FILE_TYPE.hasOwnProperty(type)) {
-            return new GameObject(this.spriteSheet, Config.FILE_TYPE[type])
+            return new GameObject(this.getSpriteSheet(), Config.FILE_TYPE[type], repo.name)
         }
 
-        return new GameObject(this.spriteSheet, Config.UNKNOWN_TYPE)
+        return new GameObject(this.getSpriteSheet(), Config.UNKNOWN_TYPE, repo.name)
     }
 
-    createTileGameObject(type, width, height) {
+    static createTileGameObject(type, width, height) {
         if (Config.TILE_TYPE.hasOwnProperty(type)) {
-            return new TileGameObject(this.spriteSheet, Config.TILE_TYPE[type], width, height)
+            return new TileGameObject(this.getSpriteSheet(), Config.TILE_TYPE[type], width, height)
         }
 
-        return new TileGameObject(this.spriteSheet, Config.UNKNOWN_TYPE, width, height)
+        return new TileGameObject(this.getSpriteSheet(), Config.UNKNOWN_TYPE, width, height)
     }
 }

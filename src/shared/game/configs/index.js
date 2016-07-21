@@ -4,7 +4,7 @@ import PlayerTileset from '../../../../build/img/tileset-hoenn_ows_remake.png'
 
 const SIZE = 16
 
-var getAnimation = (name, number, type) => {
+let getAnimation = (name, number, type) => {
     return [
         [
             name + '-' + number + '-' + type + '-0',
@@ -60,11 +60,11 @@ export const TILE_TYPE = {
 
 export const UNKNOWN_TYPE = getFrontObjectOf(10)
 
-var animations = {}
+let animations = {}
 
-var _createAnimationPart = (col, row, name, number, type, part) => {
-    var size = 960 / SIZE
-    var speed = 0.05
+let _createAnimationPart = (col, row, name, number, type, part) => {
+    let size = 960 / SIZE
+    let speed = 0.05
 
     animations[name + '-' + number + '-' + type + '-' + part] = {
         frames: [
@@ -75,16 +75,16 @@ var _createAnimationPart = (col, row, name, number, type, part) => {
     }
 }
 
-var _createAnimationType = (col, row, number, name, type) => {
+let _createAnimationType = (col, row, number, name, type) => {
     _createAnimationPart(col, row, name, number, type, 0)
     _createAnimationPart(col + 1, row, name, number, type, 1)
     _createAnimationPart(col, row + 1, name, number, type, 2)
     _createAnimationPart(col + 1, row + 1, name, number, type, 3)
 }
 
-var _createAnimations = (initial, width, height, size, name) => {
-    for (var row = 0; row < height; row += 8) {
-        for (var col = 0; col < width; col += 4) {
+let _createAnimations = (initial, width, height, size, name) => {
+    for (let row = 0; row < height; row += 8) {
+        for (let col = 0; col < width; col += 4) {
             _createAnimationType(col, row, col / 4 + row / 8 * 15, name, 'back')
             _createAnimationType(col + 2, row, col / 4 + row / 8 * 15, name, 'left')
             _createAnimationType(col, row + 4, col / 4 + row / 8 * 15, name, 'front')
@@ -93,9 +93,9 @@ var _createAnimations = (initial, width, height, size, name) => {
     }
 }
 
-var _createPlayerAnimationPart = (col, row, name, number, type, part) => {
-    var size = 800 / SIZE
-    var speed = 0.05
+let _createPlayerAnimationPart = (col, row, name, number, type, part) => {
+    let size = 800 / SIZE
+    let speed = 0.05
 
     animations[name + '-' + number + '-' + type + '-' + part] = {
         frames: [10178 + col + row * size],
@@ -103,16 +103,16 @@ var _createPlayerAnimationPart = (col, row, name, number, type, part) => {
     }
 }
 
-var _createPlayerAnimationType = (col, row, number, name, type) => {
+let _createPlayerAnimationType = (col, row, number, name, type) => {
     _createPlayerAnimationPart(col, row, name, number, type, 0)
     _createPlayerAnimationPart(col + 1, row, name, number, type, 1)
     _createPlayerAnimationPart(col, row + 1, name, number, type, 2)
     _createPlayerAnimationPart(col + 1, row + 1, name, number, type, 3)
 }
 
-var _createPlayerAnimations = (initial, width, height, size, name) => {
-    for (var row = 0; row < height; row += 4) {
-        for (var col = 0; col < width; col += 4) {
+let _createPlayerAnimations = (initial, width, height, size, name) => {
+    for (let row = 0; row < height; row += 4) {
+        for (let col = 0; col < width; col += 4) {
             _createPlayerAnimationType(col, row, col / 4 + row / 4 * size / 4, name, 'front')
             _createPlayerAnimationType(col + 2, row, col / 4 + row / 4 * size / 4, name, 'right')
             _createPlayerAnimationType(col, row + 2, col / 4 + row / 4 * size / 4, name, 'back')
@@ -124,11 +124,11 @@ var _createPlayerAnimations = (initial, width, height, size, name) => {
 _createAnimations(0, 960, 1408, 16, 'o')
 _createPlayerAnimations(10178, 800, 600, 16, 'p')
 
-var getPostionOnMapTileset = (col, row) => {
+let getPostionOnMapTileset = (col, row) => {
     return col + (row * 62) - 1 + 5280
 }
 
-animations.ground = getPostionOnMapTileset(12, 1)
+animations.ground = getPostionOnMapTileset(12, 26)
 
 animations['d-1'] = getPostionOnMapTileset(22, 25)
 animations['d-2'] = getPostionOnMapTileset(23, 25)

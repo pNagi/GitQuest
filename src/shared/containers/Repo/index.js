@@ -8,7 +8,7 @@ class Repo extends Component {
     }
 
     componentDidMount() {
-        var params = this.props.params
+        let params = this.props.params
         Game.start(params.user, params.repo, params.path)
     }
 
