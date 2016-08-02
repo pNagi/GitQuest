@@ -1,26 +1,25 @@
-import Player from 'shared/game/player'
+// import Player from 'shared/game/player'
 import * as KeyCode from 'shared/game/constants/keyCodes'
 import * as API from 'shared/game/constants/API'
 
-import Factory from 'shared/game/factory'
-import MapGenerator from 'shared/game/map'
+// import Factory from 'shared/game/factory'
+import Map from 'shared/game/map/Map'
 
 exports.start = (user, repo, path = '') => {
-    let gameEngine = new GameEngine()
-    gameEngine.loadMap(user, repo, path)
+    let gameEngine = new GameEngine(user, repo, path)
 }
 
 class GameEngine {
-    constructor() {
+    constructor(user, repo, path) {
         this._createCanvas()
         this._createStage()
-        this._createMap()
+        this.loadMap(user, repo, path)
     }
 
     _createCanvas() {
         this.canvas = document.getElementById('canvas')
         this.canvas.width = window.innerWidth - 16
-        this.canvas.height = window.innerHeight * 4 / 5 - 16
+        this.canvas.height = window.innerHeight - 16
     }
 
     _createStage() {
@@ -28,10 +27,6 @@ class GameEngine {
             throw 'Canvas not found'
         this.stage = new createjs.Stage(this.canvas)
         this.stage.snapToPixelEnabled = true
-    }
-
-    _createMap() {
-        this.map = new MapGenerator(this.canvas.width, this.canvas.height)
     }
 
     loadMap(user, repo, path) {
@@ -53,14 +48,32 @@ class GameEngine {
         createjs.Ticker.removeAllEventListeners()
     }
 
-    _addMapToStage() {
-        this.stage.addChild(this.map.sprite)
-        this.stage.update()
+    _handleFileLoad(event) {
+        console.log('handle file load')
+        this._createMap(event.result)
+    }
+
+    _createMap(repo) {
+        this.map = new Map(repo.length)
+        // this._createObjects(repo)
+    }
+
+    _createObjects(repo) {
+        repo.forEach(function(object) {
+            // this.map.placeObjectRandomly(Factory.createGameObject(object))
+        }, this)
+    }
+
+    _handleComplete(event) {
+        console.log('handle complete')
+        this._enableStage()
+        this._addMapToStage()
     }
 
     _enableStage() {
         let tick = () => {
-            this.map.translate()
+            console.log('tick')
+            // this.map.translate()
             return this.stage.update()
         }
 
@@ -83,19 +96,15 @@ class GameEngine {
                     case KeyCode.SPACE:
                         break
                     case KeyCode.KEY_LEFT:
-                        Player.getInstance().walkLeft()
                         this.map.setHorizontalSpeed(-1 * SPEED)
                         break
                     case KeyCode.KEY_UP:
-                        Player.getInstance().walkUp()
                         this.map.setVerticalSpeed(-1 * SPEED)
                         break
                     case KeyCode.KEY_RIGHT:
-                        Player.getInstance().walkRight()
                         this.map.setHorizontalSpeed(SPEED)
                         break
                     case KeyCode.KEY_DOWN:
-                        Player.getInstance().walkDown()
                         this.map.setVerticalSpeed(SPEED)
                         break
                 }
@@ -111,20 +120,8 @@ class GameEngine {
         }
     }
 
-    _createObjects(repo) {
-        repo.forEach(function(entry) {
-            this.map.placeObjectRandomly(Factory.createGameObject(entry))
-        }, this)
-    }
-
-    _handleComplete(event) {
-        console.log('handle complete')
-        this._enableStage()
-        this._addMapToStage()
-    }
-
-    _handleFileLoad(event) {
-        console.log('handle file load')
-        this._createObjects(event.result)
+    _addMapToStage() {
+        this.stage.addChild(this.map.sprite)
+        this.stage.update()
     }
 }

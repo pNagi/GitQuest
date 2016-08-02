@@ -2,7 +2,7 @@ import PokemonTileset from '../../../../build/img/f30221.png'
 import MapTileset from '../../../../build/img/bunch_o__free_tiles_by_magiscarf-d6ih36g.png'
 import PlayerTileset from '../../../../build/img/tileset-hoenn_ows_remake.png'
 
-const SIZE = 16
+export const SIZE = 16
 
 let getAnimation = (name, number, type) => {
     return [
@@ -41,9 +41,15 @@ export const PLAYER = getFrontPlayerOf(1)
 
 export const FILE_TYPE = {
     dir: [
-        [null, 'd-1', 'd-2', 'd-3', null],
-        ['e-l-1', 'd-4', 'd-5', 'd-6', 'e-r-1'],
-        ['e-l-2', 'd-7', 'd-8', 'd-9', 'e-r-2'],
+        [
+            null, 'd-1', 'd-2', 'd-3', null
+        ],
+        [
+            'e-l-1', 'd-4', 'd-5', 'd-6', 'e-r-1'
+        ],
+        [
+            'e-l-2', 'd-7', 'd-8', 'd-9', 'e-r-2'
+        ],
         [null, 'd-10', 'd-11', 'd-12', null]
     ],
     md: getFrontObjectOf(3),
@@ -57,6 +63,10 @@ export const TILE_TYPE = {
         ['ground']
     ]
 }
+
+export const GRASS = [
+    ['grass']
+]
 
 export const UNKNOWN_TYPE = getFrontObjectOf(10)
 
@@ -128,7 +138,11 @@ let getPostionOnMapTileset = (col, row) => {
     return col + (row * 62) - 1 + 5280
 }
 
-animations.ground = getPostionOnMapTileset(12, 26)
+animations.NONE = 0
+
+animations.GROUND = getPostionOnMapTileset(12, 26)
+
+animations.GRASS = getPostionOnMapTileset(34, 5)
 
 animations['d-1'] = getPostionOnMapTileset(22, 25)
 animations['d-2'] = getPostionOnMapTileset(23, 25)
