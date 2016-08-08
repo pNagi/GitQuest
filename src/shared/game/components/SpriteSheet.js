@@ -11,4 +11,8 @@ export default class SpriteSheet {
 
         return this._spriteSheet
     }
+
+    static hasType(type) {
+        return Config.TILESET.animations.hasOwnProperty(type)
+    }
 }

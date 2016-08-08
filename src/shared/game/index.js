@@ -1,9 +1,8 @@
-// import Player from 'shared/game/player'
 import * as KeyCode from 'shared/game/constants/keyCodes'
 import * as API from 'shared/game/constants/API'
 
-// import Factory from 'shared/game/factory'
 import Map from 'shared/game/map/Map'
+import Camera from 'shared/game/camera/Camera'
 
 exports.start = (user, repo, path = '') => {
     let gameEngine = new GameEngine(user, repo, path)
@@ -11,15 +10,21 @@ exports.start = (user, repo, path = '') => {
 
 class GameEngine {
     constructor(user, repo, path) {
+        this.camera = new Camera()
+        this._createCamera()
         this._createCanvas()
         this._createStage()
         this.loadMap(user, repo, path)
     }
 
+    _createCamera() {
+        this.camera = new Camera()
+    }
+
     _createCanvas() {
         this.canvas = document.getElementById('canvas')
-        this.canvas.width = window.innerWidth - 16
-        this.canvas.height = window.innerHeight - 16
+        this.canvas.width = this.camera.width
+        this.canvas.height = this.camera.height
     }
 
     _createStage() {
@@ -54,14 +59,7 @@ class GameEngine {
     }
 
     _createMap(repo) {
-        this.map = new Map(repo.length)
-        // this._createObjects(repo)
-    }
-
-    _createObjects(repo) {
-        repo.forEach(function(object) {
-            // this.map.placeObjectRandomly(Factory.createGameObject(object))
-        }, this)
+        this.map = new Map(repo)
     }
 
     _handleComplete(event) {
@@ -73,7 +71,7 @@ class GameEngine {
     _enableStage() {
         let tick = () => {
             console.log('tick')
-            // this.map.translate()
+            this.camera.translate(this.map)
             return this.stage.update()
         }
 
@@ -96,16 +94,16 @@ class GameEngine {
                     case KeyCode.SPACE:
                         break
                     case KeyCode.KEY_LEFT:
-                        this.map.setHorizontalSpeed(-1 * SPEED)
+                        this.camera.setHorizontalSpeed(-1 * SPEED)
                         break
                     case KeyCode.KEY_UP:
-                        this.map.setVerticalSpeed(-1 * SPEED)
+                        this.camera.setVerticalSpeed(-1 * SPEED)
                         break
                     case KeyCode.KEY_RIGHT:
-                        this.map.setHorizontalSpeed(SPEED)
+                        this.camera.setHorizontalSpeed(SPEED)
                         break
                     case KeyCode.KEY_DOWN:
-                        this.map.setVerticalSpeed(SPEED)
+                        this.camera.setVerticalSpeed(SPEED)
                         break
                 }
             }
@@ -114,8 +112,8 @@ class GameEngine {
         document.onkeyup = (e) => {
             if (e.keyCode === currentPressed) {
                 currentPressed = ''
-                this.map.setHorizontalSpeed(0)
-                this.map.setVerticalSpeed(0)
+                this.camera.setHorizontalSpeed(0)
+                this.camera.setVerticalSpeed(0)
             }
         }
     }

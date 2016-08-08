@@ -1,9 +1,10 @@
-import GameObject from 'shared/game/components/GameObject'
+import Container from 'shared/game/components/Container'
+import * as Types from 'shared/game/configs/'
 
 export default class Directory extends Container {
 
-    constructor(grid, name) {
-        super(grid)
+    constructor(name) {
+        super(Types.DIRECTORY)
 
         let text = new createjs.Text(name, '15px Arial', '#eee')
         text.textBaseline = 'alphabetic'

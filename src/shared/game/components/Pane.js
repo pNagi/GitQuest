@@ -14,7 +14,7 @@ export default class Pane {
             this._grid[row] = new Array()
             for (let col = 0; col < this.numberOfCols; col++) {
                 if (!!value) {
-                    this._grid[row][col] = new Sprite(value, col, row)
+                    this._grid[row][col] = new Sprite(value[0][0], col, row)
                     this._pane.addChild(this._grid[row][col].sprite)
                 } else {
                     this._grid[row][col] = 0
