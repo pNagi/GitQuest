@@ -18,7 +18,6 @@ export default class MapGenerator {
     }
 
     static setGrid(col, row, value) {
-        console.log(row, col, this.grid[row])
         this.grid[row][col] = value
         this.grid[row + 1][col] = value
         this.grid[row][col + 1] = value

@@ -1,11 +1,12 @@
-import GameObject from 'shared/game/components/GameObject'
+import Container from 'shared/game/components/Container'
+import {FILE, UNKNOWN} from 'shared/game/configs/Types'
 
 export default class File extends Container {
 
-    constructor(grid, name) {
-        super(grid)
+    constructor(name, type) {
+        super(FILE[type] || UNKNOWN)
 
-        let text = new createjs.Text(name, '15px Arial', '#eee')
+        let text = new createjs.Text(name, '12px Arial', '#eee')
         text.textBaseline = 'alphabetic'
         text.y = (this._grid.length + 1) * 16
         this._container.addChild(text)

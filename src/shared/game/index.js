@@ -1,6 +1,7 @@
 import * as KeyCode from 'shared/game/constants/keyCodes'
 import * as API from 'shared/game/constants/API'
 
+import Player from 'shared/game/player/Player'
 import Map from 'shared/game/map/Map'
 import Camera from 'shared/game/camera/Camera'
 
@@ -10,10 +11,10 @@ exports.start = (user, repo, path = '') => {
 
 class GameEngine {
     constructor(user, repo, path) {
-        this.camera = new Camera()
         this._createCamera()
         this._createCanvas()
         this._createStage()
+        this._createPlayer(user)
         this.loadMap(user, repo, path)
     }
 
@@ -23,6 +24,7 @@ class GameEngine {
 
     _createCanvas() {
         this.canvas = document.getElementById('canvas')
+        this.canvas.style.backgroundColor = '#ff0000'
         this.canvas.width = this.camera.width
         this.canvas.height = this.camera.height
     }
@@ -32,6 +34,10 @@ class GameEngine {
             throw 'Canvas not found'
         this.stage = new createjs.Stage(this.canvas)
         this.stage.snapToPixelEnabled = true
+    }
+
+    _createPlayer(name) {
+        this.player = new Player(name)
     }
 
     loadMap(user, repo, path) {
@@ -59,7 +65,7 @@ class GameEngine {
     }
 
     _createMap(repo) {
-        this.map = new Map(repo)
+        this.map = new Map(repo, this.player, this.camera)
     }
 
     _handleComplete(event) {
@@ -70,8 +76,8 @@ class GameEngine {
 
     _enableStage() {
         let tick = () => {
-            console.log('tick')
-            this.camera.translate(this.map)
+            // console.log('tick')
+            this.map.translate()
             return this.stage.update()
         }
 
@@ -79,7 +85,7 @@ class GameEngine {
         createjs.Ticker.useRAF = true
         createjs.Ticker.setFPS(60)
 
-        let SPEED = 3
+        let SPEED = 4
 
         let currentPressed = ''
 
@@ -94,16 +100,20 @@ class GameEngine {
                     case KeyCode.SPACE:
                         break
                     case KeyCode.KEY_LEFT:
-                        this.camera.setHorizontalSpeed(-1 * SPEED)
+                        this.map.setHorizontalSpeed(-1 * SPEED)
+                        this.player.turnLeft()
                         break
                     case KeyCode.KEY_UP:
-                        this.camera.setVerticalSpeed(-1 * SPEED)
+                        this.map.setVerticalSpeed(-1 * SPEED)
+                        this.player.turnBack()
                         break
                     case KeyCode.KEY_RIGHT:
-                        this.camera.setHorizontalSpeed(SPEED)
+                        this.map.setHorizontalSpeed(SPEED)
+                        this.player.turnRight()
                         break
                     case KeyCode.KEY_DOWN:
-                        this.camera.setVerticalSpeed(SPEED)
+                        this.map.setVerticalSpeed(SPEED)
+                        this.player.faceFront()
                         break
                 }
             }
@@ -112,8 +122,8 @@ class GameEngine {
         document.onkeyup = (e) => {
             if (e.keyCode === currentPressed) {
                 currentPressed = ''
-                this.camera.setHorizontalSpeed(0)
-                this.camera.setVerticalSpeed(0)
+                this.map.setHorizontalSpeed(0)
+                this.map.setVerticalSpeed(0)
             }
         }
     }

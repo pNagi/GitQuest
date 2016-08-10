@@ -4,9 +4,6 @@ import {SpriteSheet} from 'shared/game/components'
 
 export default class Sprite {
     constructor(type, col = 0, row = 0) {
-        console.log('create sprite type')
-        console.log(type)
-
         if (!SpriteSheet.hasType(type)) {
             type = Types.UNKNOWN
         }
@@ -31,8 +28,6 @@ export default class Sprite {
     }
 
     setFrame(frame) {
-        // if (Config.animations.hasOwnProperty(frame)) {
-        //     this._sprite.gotoAndStop(this._type + '-' + frame)
-        // }
+        this._sprite.gotoAndStop(frame)
     }
 }

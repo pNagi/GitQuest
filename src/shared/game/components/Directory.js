@@ -1,14 +1,14 @@
 import Container from 'shared/game/components/Container'
-import * as Types from 'shared/game/configs/'
+import {DIRECTORY} from 'shared/game/configs/Types'
 
 export default class Directory extends Container {
 
     constructor(name) {
-        super(Types.DIRECTORY)
+        super(DIRECTORY)
 
-        let text = new createjs.Text(name, '15px Arial', '#eee')
+        let text = new createjs.Text(name, '12px Arial', '#eee')
         text.textBaseline = 'alphabetic'
-        text.y = (this._grid.length + 1) * 16
+        text.y = (this._grid.length - 1) * 16
         this._container.addChild(text)
     }
 }

@@ -1,11 +1,9 @@
-import * as Config from 'shared/game/configs'
+import {SIZE} from 'shared/game/configs'
 
 import {Sprite} from 'shared/game/components'
 
 export default class Container {
     constructor(grid) {
-        console.log('create container')
-        console.log(grid)
         this._numberOfCols = grid[0].length
         this._numberOfRows = grid.length
 
@@ -22,6 +20,30 @@ export default class Container {
                 }
             }
         }
+    }
+
+    setAnimation(grid) {
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let col = 0; col < this.numberOfCols; col++) {
+                this._grid[row][col].setFrame(grid[row][col])
+            }
+        }
+    }
+
+    get x() {
+        return this.sprite.x
+    }
+
+    get y() {
+        return this.sprite.y
+    }
+
+    get width() {
+        return this._numberOfCols * SIZE
+    }
+
+    get height() {
+        return this._numberOfRows * SIZE
     }
 
     get numberOfCols() {
