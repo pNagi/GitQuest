@@ -16,8 +16,9 @@ export default class Map {
 
         this._map = new createjs.Container()
 
-        this._groundLayer_0 = new Pane(this.numberOfCols, this.numberOfRows, GROUND)
-        this._groundLayer_1 = new Layer(MapGenerator.generate(this.numberOfCols, this.numberOfRows))
+        this._groundLayer = new Array()
+        this._groundLayer[0] = new Pane(this.numberOfCols, this.numberOfRows, GROUND)
+        this._groundLayer[1] = new Layer(MapGenerator.generate(this.numberOfCols, this.numberOfRows))
 
         this._objectLayer = new Pane(this.numberOfCols, this.numberOfRows)
 
@@ -25,8 +26,8 @@ export default class Map {
         this._placeObjects(repo)
 
         // let generatePath = PathGenerator.generate(this.numberOfCols, this.numberOfRows, repoSize)
-        this._map.addChild(this._groundLayer_0.sprite)
-        this._map.addChild(this._groundLayer_1.sprite)
+        this._map.addChild(this._groundLayer[0].sprite)
+        this._map.addChild(this._groundLayer[1].sprite)
         this._map.addChild(this._objectLayer.sprite)
 
         this._setInitialPosition(camera)
@@ -60,7 +61,6 @@ export default class Map {
     setCamera() {
         this._camera.x = this._map.x * -1
         this._camera.y = this._map.y * -1
-        // console.log('camera is at', this._camera.x, this._camera.y)
     }
 
     set x(x) {
@@ -108,8 +108,8 @@ export default class Map {
                 if (!this._isInCameraReachZoneX(this._player.x)) {
                     if (this._isInCenterOfCameraX(this._player.x)) {
                         this._map.x -= speed
+                        this.setCamera()
                     }
-                    this.setCamera()
                 }
             }
         }
@@ -122,29 +122,31 @@ export default class Map {
                 if (!this._isInCameraReachZoneY(this._player.y)) {
                     if (this._isInCenterOfCameraY(this._player.y)) {
                         this._map.y -= speed
+                        this.setCamera()
                     }
-                    this.setCamera()
                 }
             }
         }
 
-        console.log('x', this._player.x, this._camera.x + ((this._camera.width - this._player.width) / 2), 'y', this._player.y, this._camera.y + ((this._camera.height - this._player.height) / 2))
+        // console.log('x', this._player.x, this._camera.x + ((this._camera.width - this._player.width) / 2), 'y', this._player.y, this._camera.y + ((this._camera.height - this._player.height) / 2))
         this._sortObjects()
     }
 
     _isPassable(x, y) {
-        return !(this._isOutOfBound(x, y))
+        return !(this._isOutOfBound(x, y) || this._isImpassableObject(x, y))
     }
 
     _isOutOfBound(x, y) {
         return (x < 0 || x >= this.width - this._player.width || y < 0 || y >= this.height - this._player.height)
     }
 
+    //check player block too! 4 directions
     _isImpassableObject(x, y) {
         let row = Math.ceil(y / SIZE)
         let col = Math.ceil(x / SIZE)
 
-        return true
+        console.log('is impassable', this._objectLayer.isPassable(col, row))
+        return !(this._objectLayer.isPassable(col, row) && (this._groundLayer[1].isPassable(col, row)))
     }
 
     _isInCameraReachZoneX(x) {

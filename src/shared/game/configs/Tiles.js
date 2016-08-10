@@ -24,8 +24,6 @@ export const ROUND_ROCK_BROWN = [
     ['S1-C9-R22-B2']
 ]
 
-export const UNKNOWN = ROUND_ROCK_BROWN
-
 //GROUND
 export const TILE_GROUND = [
     ['S1-C6-R14-B2']
@@ -36,7 +34,6 @@ export const GRASS_GREEN = [
 ]
 
 //BUILDINGS
-
 export const STONE_GATE = [
     [null, 'S1-C11-R13-B4', 'S1-C12-R13-B3', 'S1-C12-R13-B4', null],
     ['S1-C14-R16-B3', 'S1-C11-R14-B2', 'S1-C12-R14-B1', 'S1-C12-R14-B2', 'S1-C13-R16-B3'],

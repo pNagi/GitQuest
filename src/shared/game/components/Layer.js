@@ -48,7 +48,7 @@ export default class Layer {
                         bottom: getGrid(grid, col, row+1),
                         bottomRight: getGrid(grid, col+1, row+1)
                     }
-                    this._grid[row][col] = new Sprite(this.getType(neighbour))
+                    this._grid[row][col] = new Sprite(this, this.getType(neighbour))
                     this._grid[row][col].setPosition(col, row)
                     this._container.addChild(this._grid[row][col].sprite)
                 }
@@ -105,5 +105,18 @@ export default class Layer {
 
     get sprite() {
         return this._container
+    }
+
+    isPassable(col, row) {
+        if (col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows) {
+            return false
+        }
+
+        if (!!!this._grid[row][col]) {
+            return true
+        }
+
+        console.log(this._grid[row][col])
+        return this._grid[row][col].isPassable()
     }
 }

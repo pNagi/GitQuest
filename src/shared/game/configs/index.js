@@ -12,7 +12,6 @@ let initAnimations = (tileset) => {
 
     let numberOfRows = tileset.height / (SIZE * 2)
     let numberOfCols = tileset.width / (SIZE * 2)
-    console.log(numberOfCols, numberOfRows)
 
     for (let row = 1; row <= Math.ceil(numberOfRows); row++) {
         let next = 1
@@ -32,13 +31,7 @@ let initAnimations = (tileset) => {
 }
 
 initAnimations(MapTileset)
-console.log(count)
-console.log('Tileset Number', tilesetNumber)
 initAnimations(PlayerTileset)
-console.log(count)
-
-console.log(images)
-console.log(animations)
 
 export const TILESET = {
     images,

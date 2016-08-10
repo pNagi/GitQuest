@@ -22,6 +22,10 @@ export default class Player extends Container {
         this.setAnimation(PLAYER_BACK)
     }
 
+    isPassable() {
+        return true
+    }
+
     translate(horizontalSpeed, verticalSpeed) {
         this._container.x += horizontalSpeed
         this._container.y += verticalSpeed

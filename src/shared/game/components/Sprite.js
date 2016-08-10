@@ -1,14 +1,13 @@
+import _ from 'lodash'
+
 import {SIZE} from 'shared/game/configs'
-import * as Types from 'shared/game/configs/Tiles'
+import {IMPASSABLE_OBJECTS} from 'shared/game/configs/Passable'
 import {SpriteSheet} from 'shared/game/components'
 
 export default class Sprite {
-    constructor(type, col = 0, row = 0) {
-        if (!SpriteSheet.hasType(type)) {
-            type = Types.UNKNOWN
-        }
-
-        this._type = type
+    constructor(parent, type, col = 0, row = 0) {
+        this._parent = parent
+        this._type = _.head(_.flattenDeep([type]))
         this._sprite = new createjs.Sprite(SpriteSheet.getInstance(), type)
         this._sprite.x = col * SIZE
         this._sprite.y = row * SIZE
@@ -29,5 +28,9 @@ export default class Sprite {
 
     setFrame(frame) {
         this._sprite.gotoAndStop(frame)
+    }
+
+    isPassable() {
+        return _.indexOf(IMPASSABLE_OBJECTS, this._type) < 0
     }
 }

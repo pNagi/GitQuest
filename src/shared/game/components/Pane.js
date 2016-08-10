@@ -14,7 +14,7 @@ export default class Pane {
             this._grid[row] = new Array()
             for (let col = 0; col < this.numberOfCols; col++) {
                 if (!!value) {
-                    this._grid[row][col] = new Sprite(value[0][0], col, row)
+                    this._grid[row][col] = new Sprite(this, value[0][0], col, row)
                     this._pane.addChild(this._grid[row][col].sprite)
                 }
             }
@@ -36,7 +36,7 @@ export default class Pane {
     _placeOnGrid(container, col, row) {
         for (let localRow = 0; localRow < container.numberOfRows; localRow++) {
             for (let localCol = 0; localCol < container.numberOfCols; localCol++) {
-                this._grid[localRow + row][localCol + col] = container
+                this._grid[localRow + row][localCol + col] = container.getSpriteAt(localCol, localRow)
             }
         }
     }
@@ -91,5 +91,18 @@ export default class Pane {
 
     get sprite() {
         return this._pane
+    }
+
+    isPassable(col, row) {
+        if (col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows) {
+            return false
+        }
+
+        if (!!!this._grid[row][col]) {
+            return true
+        }
+
+        console.log(this._grid[row][col])
+        return this._grid[row][col].isPassable()
     }
 }

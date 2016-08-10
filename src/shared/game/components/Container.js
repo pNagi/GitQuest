@@ -14,7 +14,7 @@ export default class Container {
             this._grid[row] = new Array()
             for (let col = 0; col < this.numberOfCols; col++) {
                 if (!!grid[row][col]) {
-                    this._grid[row][col] = new Sprite(grid[row][col])
+                    this._grid[row][col] = new Sprite(this, grid[row][col])
                     this._grid[row][col].setPosition(col, row)
                     this._container.addChild(this._grid[row][col].sprite)
                 }
@@ -56,5 +56,13 @@ export default class Container {
 
     get sprite() {
         return this._container
+    }
+
+    getSpriteAt(col, row) {
+        if (col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows) {
+            return null
+        }
+
+        return this._grid[row][col]
     }
 }

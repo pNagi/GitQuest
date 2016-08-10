@@ -24,7 +24,7 @@ class GameEngine {
 
     _createCanvas() {
         this.canvas = document.getElementById('canvas')
-        this.canvas.style.backgroundColor = '#ff0000'
+        this.canvas.style.backgroundColor = '#eee'
         this.canvas.width = this.camera.width
         this.canvas.height = this.camera.height
     }
