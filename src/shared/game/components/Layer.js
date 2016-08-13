@@ -1,110 +1,72 @@
-import {
-    DUNE_TOP_LEFT,
-    DUNE_TOP,
-    DUNE_TOP_RIGHT,
-    DUNE_LEFT,
-    DUNE_CENTER,
-    DUNE_RIGHT,
-    DUNE_BOTTOM_LEFT,
-    DUNE_BOTTOM,
-    DUNE_BOTTOM_RIGHT,
-    DUNE_TOP_LEFT_INSIDE,
-    DUNE_TOP_RIGHT_INSIDE,
-    DUNE_BOTTOM_LEFT_INSIDE,
-    DUNE_BOTTOM_RIGHT_INSIDE
-} from 'shared/game/configs/Types'
-import * as Config from 'shared/game/configs'
+import Container from 'shared/game/components/Container'
 
-import {Sprite} from 'shared/game/components'
+import {SIZE} from 'shared/game/configs'
 
-export default class Layer {
+export default class Layer extends Container {
     constructor(grid) {
-        console.log('create layer')
-        this._numberOfCols = grid[0].length
-        this._numberOfRows = grid.length
+        super(grid)
+    }
 
-        this._container = new createjs.Container()
-
-        let getGrid = (grid, col, row) => {
-            if (col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows) {
-                return 1
+    place(container, col = 0, row = 0, onGrid = true) {
+        if (this._checkAvailability(container, col, row)) {
+            container.sprite.x = col * SIZE
+            container.sprite.y = row * SIZE
+            this._container.addChild(container.sprite)
+            if (onGrid) {
+                this._placeOnGrid(container, col, row)
             }
+            console.log('place successfully')
+        } else {
+            console.log('place failed')
+        }
+    }
 
-            return grid[row][col]
+    _placeOnGrid(container, col, row) {
+        for (let localRow = 0; localRow < container.numberOfRows; localRow++) {
+            for (let localCol = 0; localCol < container.numberOfCols; localCol++) {
+                this._grid[localRow + row][localCol + col] = container.getSpriteAt(localCol, localRow)
+            }
+        }
+    }
+
+    placeRandomly(container) {
+        let col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
+        let row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
+
+        let safety = 10
+        while (!this._checkAvailability(container, col, row) || safety < 0) {
+            col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
+            row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
+            safety--
         }
 
-        this._grid = new Array()
-        for (let row = 0; row < this.numberOfRows; row++) {
-            this._grid[row] = new Array()
-            for (let col = 0; col < this.numberOfCols; col++) {
-                if (!!grid[row][col]) {
-                    let neighbour = {
-                        topLeft: getGrid(grid, col-1, row-1),
-                        top: getGrid(grid, col, row-1),
-                        topRight: getGrid(grid, col+1, row-1),
-                        left: getGrid(grid, col-1, row),
-                        right: getGrid(grid, col+1, row),
-                        bottomLeft: getGrid(grid, col-1, row+1),
-                        bottom: getGrid(grid, col, row+1),
-                        bottomRight: getGrid(grid, col+1, row+1)
-                    }
-                    this._grid[row][col] = new Sprite(this, this.getType(neighbour))
-                    this._grid[row][col].setPosition(col, row)
-                    this._container.addChild(this._grid[row][col].sprite)
+        if (safety < 0) {
+            return false
+        }
+
+        this.place(container, col, row)
+        return true
+    }
+
+    _checkAvailability(container, col, row) {
+        for (let localRow = 0; localRow < container.numberOfRows; localRow++) {
+            for (let localCol = 0; localCol < container.numberOfCols; localCol++) {
+                if (!this._isAvailable(localCol + col, localRow + row)) {
+                    return false
                 }
             }
         }
+
+        return true
     }
 
-    getType(neighbour) {
-        if (neighbour.top === 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
-            //top right
-            return DUNE_TOP_RIGHT
-        } else if (neighbour.top === 0 && neighbour.right !== 0 && neighbour.left === 0 && neighbour.bottom !== 0) {
-            //top left
-            return DUNE_TOP_LEFT
-        } else if (neighbour.top === 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
-            //top
-            return DUNE_TOP
-        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left === 0 && neighbour.bottom !== 0) {
-            //left
-            return DUNE_LEFT
-        } else if (neighbour.top !== 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
-            //right
-            return DUNE_RIGHT
-        } else if (neighbour.top !== 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom === 0) {
-            //bottom right
-            return DUNE_BOTTOM_RIGHT
-        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left === 0 && neighbour.bottom === 0) {
-            //bottom left
-            return DUNE_BOTTOM_LEFT
-        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom === 0) {
-            //bottom
-            return DUNE_BOTTOM
-        } else if (neighbour.topLeft === 0) {
-            return DUNE_TOP_LEFT_INSIDE
-        } else if (neighbour.topRight === 0) {
-            return DUNE_TOP_RIGHT_INSIDE
-        } else if (neighbour.bottomLeft === 0) {
-            return DUNE_BOTTOM_LEFT_INSIDE
-        } else if (neighbour.bottomRight === 0) {
-            return DUNE_BOTTOM_RIGHT_INSIDE
-        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
-            //center
-            return DUNE_CENTER
-        }
-    }
+    _isAvailable(col, row) {
+        if (col > this.numberOfCols || col < 0)
+            return false
+        if (row > this.numberOfRows || row < 0)
+            return false
 
-    get numberOfCols() {
-        return this._numberOfCols
-    }
-
-    get numberOfRows() {
-        return this._numberOfRows
-    }
-
-    get sprite() {
-        return this._container
+        return (!!!this._grid[row][col])
     }
 
     isPassable(col, row) {
@@ -112,11 +74,24 @@ export default class Layer {
             return false
         }
 
-        if (!!!this._grid[row][col]) {
-            return true
+        if (!!this._grid[row][col]) {
+            return this._grid[row][col].isPassable()
         }
 
-        console.log(this._grid[row][col])
-        return this._grid[row][col].isPassable()
+        return true
+    }
+
+    setVisible(startCol, startRow, endCol, endRow) {
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let col = 0; col < this.numberOfCols; col++) {
+                if (!!this._grid[row][col]) {
+                    if (row >= startRow && row <= endRow && col >= startCol && col <= endCol) {
+                        this._grid[row][col].visible = true
+                    } else {
+                        this._grid[row][col].visible = false
+                    }
+                }
+            }
+        }
     }
 }

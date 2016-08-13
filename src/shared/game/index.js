@@ -60,7 +60,6 @@ class GameEngine {
     }
 
     _handleFileLoad(event) {
-        console.log('handle file load')
         this._createMap(event.result)
     }
 
@@ -69,14 +68,13 @@ class GameEngine {
     }
 
     _handleComplete(event) {
-        console.log('handle complete')
         this._enableStage()
         this._addMapToStage()
     }
 
     _enableStage() {
         let tick = () => {
-            // console.log('tick')
+            console.log('tick')
             this.map.translate()
             return this.stage.update()
         }

@@ -13,6 +13,10 @@ export default class Sprite {
         this._sprite.y = row * SIZE
     }
 
+    set visible(visible) {
+        this._sprite.visible = visible
+    }
+
     get type() {
         return this._type
     }

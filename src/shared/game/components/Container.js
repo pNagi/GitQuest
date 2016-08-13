@@ -14,8 +14,7 @@ export default class Container {
             this._grid[row] = new Array()
             for (let col = 0; col < this.numberOfCols; col++) {
                 if (!!grid[row][col]) {
-                    this._grid[row][col] = new Sprite(this, grid[row][col])
-                    this._grid[row][col].setPosition(col, row)
+                    this._grid[row][col] = new Sprite(this, grid[row][col], col, row)
                     this._container.addChild(this._grid[row][col].sprite)
                 }
             }

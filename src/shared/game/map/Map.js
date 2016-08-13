@@ -1,5 +1,8 @@
-import {Container, Pane, Layer, File, Directory} from 'shared/game/components'
+import {Container, Layer, File, Directory} from 'shared/game/components'
+
+import {GridCreator} from 'shared/game/utils/'
 import MapGenerator from 'shared/game/map/MapGenerator'
+
 import {GROUND} from 'shared/game/configs/Types'
 import {SIZE} from 'shared/game/configs'
 
@@ -8,7 +11,9 @@ const EXPAND_SIZE = 6
 export default class Map {
 
     constructor(repo, player, camera) {
+
         let repoSize = repo.length
+
         this._numberOfCols = Math.ceil(repoSize * EXPAND_SIZE)
         this._numberOfRows = Math.ceil(repoSize * EXPAND_SIZE)
 
@@ -16,11 +21,11 @@ export default class Map {
 
         this._map = new createjs.Container()
 
+        this._objectLayer = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows))
+        
         this._groundLayer = new Array()
-        this._groundLayer[0] = new Pane(this.numberOfCols, this.numberOfRows, GROUND)
-        this._groundLayer[1] = new Layer(MapGenerator.generate(this.numberOfCols, this.numberOfRows))
-
-        this._objectLayer = new Pane(this.numberOfCols, this.numberOfRows)
+        this._groundLayer[0] = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows, GROUND))
+        this._groundLayer[1] = new Layer(GridCreator.makeDune(MapGenerator.generate(this.numberOfCols, this.numberOfRows)))
 
         this._placePlayer(player)
         this._placeObjects(repo)
@@ -37,7 +42,7 @@ export default class Map {
 
     _placePlayer(player) {
         this._player = player
-        this._objectLayer.place(player, (this._numberOfCols - player.numberOfCols) / 2, (this._numberOfRows - player.numberOfRows) / 2)
+        this._objectLayer.place(player, (this._numberOfCols - player.numberOfCols) / 2, (this._numberOfRows - player.numberOfRows) / 2, false)
     }
 
     _placeObjects(repo) {
@@ -56,6 +61,7 @@ export default class Map {
         this._map.x = (this._camera.width - this.width) / 2
         this._map.y = (this._camera.height - this.height) / 2
         this.setCamera()
+        this._setVisible()
     }
 
     setCamera() {
@@ -128,7 +134,7 @@ export default class Map {
             }
         }
 
-        // console.log('x', this._player.x, this._camera.x + ((this._camera.width - this._player.width) / 2), 'y', this._player.y, this._camera.y + ((this._camera.height - this._player.height) / 2))
+        this._setVisible()
         this._sortObjects()
     }
 
@@ -145,7 +151,6 @@ export default class Map {
         let row = Math.ceil(y / SIZE)
         let col = Math.ceil(x / SIZE)
 
-        console.log('is impassable', this._objectLayer.isPassable(col, row))
         return !(this._objectLayer.isPassable(col, row) && (this._groundLayer[1].isPassable(col, row)))
     }
 
@@ -177,5 +182,16 @@ export default class Map {
         }
 
         this._objectLayer.sprite.sortChildren(sortByY)
+    }
+
+    _setVisible() {
+        let startCol = Math.floor(this._camera.x / SIZE)
+        let startRow = Math.floor(this._camera.y / SIZE)
+        let endCol = Math.ceil((this._camera.x + this._camera.width) / SIZE)
+        let endRow = Math.ceil((this._camera.y + this._camera.height) / SIZE)
+
+        this._groundLayer[0].setVisible(startCol, startRow, endCol, endRow)
+        this._groundLayer[1].setVisible(startCol, startRow, endCol, endRow)
+        this._objectLayer.setVisible(startCol, startRow, endCol, endRow)
     }
 }
