@@ -30,10 +30,11 @@ export default class Layer extends Container {
     }
 
     placeRandomly(container) {
+        let safety = 1000
+
         let col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
         let row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
 
-        let safety = 10
         while (!this._checkAvailability(container, col, row) || safety < 0) {
             col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
             row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
@@ -51,7 +52,7 @@ export default class Layer extends Container {
     _checkAvailability(container, col, row) {
         for (let localRow = 0; localRow < container.numberOfRows; localRow++) {
             for (let localCol = 0; localCol < container.numberOfCols; localCol++) {
-                if (!this._isAvailable(localCol + col, localRow + row)) {
+                if (!!container.getSpriteAt(localCol, localRow) && !this._isAvailable(localCol + col, localRow + row)) {
                     return false
                 }
             }
@@ -61,16 +62,11 @@ export default class Layer extends Container {
     }
 
     _isAvailable(col, row) {
-        if (col > this.numberOfCols || col < 0)
-            return false
-        if (row > this.numberOfRows || row < 0)
-            return false
-
-        return (!!!this._grid[row][col])
+        return this.isOutOfBound(col, row) ? false : !!!this._grid[row][col]
     }
 
     isPassable(col, row) {
-        if (col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows) {
+        if (this.isOutOfBound(col, row)) {
             return false
         }
 
@@ -85,11 +81,7 @@ export default class Layer extends Container {
         for (let row = 0; row < this.numberOfRows; row++) {
             for (let col = 0; col < this.numberOfCols; col++) {
                 if (!!this._grid[row][col]) {
-                    if (row >= startRow && row <= endRow && col >= startCol && col <= endCol) {
-                        this._grid[row][col].visible = true
-                    } else {
-                        this._grid[row][col].visible = false
-                    }
+                    this._grid[row][col].visible = (row >= startRow && row <= endRow && col >= startCol && col <= endCol)
                 }
             }
         }

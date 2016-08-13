@@ -30,20 +30,13 @@ export default class MapGenerator {
             this.grid[row] = new Array()
             this.grid[row + 1] = new Array()
             for (let col = 0; col < this.numberOfCols; col += 2) {
-                if (this.randomByPercent()) {
-                    this.setGrid(col, row, FILL)
-                } else {
-                    this.setGrid(col, row, NONE)
-                }
-
-                console.log('random fill')
+                this.setGrid(col, row, this.randomByPercent() ? FILL : NONE)
             }
         }
     }
 
     static randomByPercent() {
-        let fill = Math.floor(Math.random() * 100)
-        return fill < RANDOM_FILL_PERCENT
+        return Math.floor(Math.random() * 100) < RANDOM_FILL_PERCENT
     }
 
     static smoothMap() {

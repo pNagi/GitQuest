@@ -57,8 +57,12 @@ export default class Container {
         return this._container
     }
 
+    isOutOfBound(col, row) {
+        return col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows
+    }
+
     getSpriteAt(col, row) {
-        if (col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows) {
+        if (this.isOutOfBound(col, row)) {
             return null
         }
 
