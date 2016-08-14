@@ -19,7 +19,8 @@ import {
     LOW_DUNE_WITH_GRASS_TOP_RIGHT_INSIDE,
     LOW_DUNE_WITH_GRASS_BOTTOM_LEFT_INSIDE,
     LOW_DUNE_WITH_GRASS_BOTTOM_RIGHT_INSIDE,
-    ROUND_ROCK_BROWN
+    ROUND_ROCK_BROWN,
+    EMPTY
 } from 'shared/game/configs/Tiles'
 
 export const PLAYER_FRONT = CHARACTER_2_FRONT
@@ -33,6 +34,8 @@ export const GROUND = TILE_GROUND
 export const GRASS = GRASS_GREEN
 export const DIRECTORY = STONE_GATE
 export const FILE = {}
+
+export const PATH = EMPTY
 
 export const DUNE_TOP_LEFT = LOW_DUNE_WITH_GRASS_TOP_LEFT
 export const DUNE_TOP = LOW_DUNE_WITH_GRASS_TOP

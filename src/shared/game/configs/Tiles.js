@@ -1,5 +1,9 @@
 //Characters
 
+export const EMPTY = [
+    ['S1-C1-R1-B1']
+]
+
 export const CHARACTER_2_FRONT = [
     ['S2-C3-R1-B1', 'S2-C3-R1-B2'],
     ['S2-C3-R1-B3', 'S2-C3-R1-B4']

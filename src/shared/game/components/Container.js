@@ -21,20 +21,20 @@ export default class Container {
         }
     }
 
-    setAnimation(grid) {
-        for (let row = 0; row < this.numberOfRows; row++) {
-            for (let col = 0; col < this.numberOfCols; col++) {
-                this._grid[row][col].setFrame(grid[row][col])
-            }
-        }
-    }
-
     get x() {
         return this.sprite.x
     }
 
     get y() {
         return this.sprite.y
+    }
+
+    get col() {
+        return this._col
+    }
+
+    get row() {
+        return this._row
     }
 
     get width() {
@@ -57,15 +57,26 @@ export default class Container {
         return this._container
     }
 
+    setPosition(col, row) {
+        this._col = col
+        this._row = row
+        this._container.x = col * SIZE
+        this._container.y = row * SIZE
+    }
+
+    setAnimation(grid) {
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let col = 0; col < this.numberOfCols; col++) {
+                this._grid[row][col].setFrame(grid[row][col])
+            }
+        }
+    }
+
     isOutOfBound(col, row) {
         return col < 0 || col >= this._numberOfCols || row < 0 || row >= this._numberOfRows
     }
 
     getSpriteAt(col, row) {
-        if (this.isOutOfBound(col, row)) {
-            return null
-        }
-
-        return this._grid[row][col]
+        return this.isOutOfBound(col, row) ? null : this._grid[row][col]
     }
 }

@@ -5,3 +5,4 @@ export Layer from 'shared/game/components/Layer'
 
 export File from 'shared/game/components/File'
 export Directory from 'shared/game/components/Directory'
+export Path from 'shared/game/components/Path'

@@ -2,6 +2,7 @@ import {Container, Layer, File, Directory} from 'shared/game/components'
 
 import {GridCreator} from 'shared/game/utils/'
 import MapGenerator from 'shared/game/map/MapGenerator'
+import PathGenerator from 'shared/game/map/PathGenerator'
 
 import {GROUND} from 'shared/game/configs/Types'
 import {SIZE} from 'shared/game/configs'
@@ -21,16 +22,17 @@ export default class Map {
 
         this._map = new createjs.Container()
 
-        this._objectLayer = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows))
-        
+        this._objects = new Array()
+
+        this._player = player
+        this._createObjects(repo)
+        this._path = new PathGenerator(this._player, this._objects, this.numberOfCols, this.numberOfRows)
+        this._objectLayer = this._path.getLayer()
+
         this._groundLayer = new Array()
         this._groundLayer[0] = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows, GROUND))
         this._groundLayer[1] = new Layer(GridCreator.makeDune(MapGenerator.generate(this.numberOfCols, this.numberOfRows)))
 
-        this._placePlayer(player)
-        this._placeObjects(repo)
-
-        // let generatePath = PathGenerator.generate(this.numberOfCols, this.numberOfRows, repoSize)
         this._map.addChild(this._groundLayer[0].sprite)
         this._map.addChild(this._groundLayer[1].sprite)
         this._map.addChild(this._objectLayer.sprite)
@@ -40,18 +42,16 @@ export default class Map {
         this._verticalSpeed = 0
     }
 
-    _placePlayer(player) {
-        this._player = player
-        this._objectLayer.place(player, (this._numberOfCols - player.numberOfCols) / 2, (this._numberOfRows - player.numberOfRows) / 2, false)
-    }
 
-    _placeObjects(repo) {
+    _createObjects(repo) {
         repo.forEach(function(object) {
             if (object.type === 'dir') {
-                this._objectLayer.placeRandomly(new Directory(object.name))
+                // this._objectLayer.placeRandomly(new Directory(object.name))
+                this._objects.push(new Directory(object.name))
             } else if (object.type === 'file') {
                 let type = object.name.split('.').pop()
-                this._objectLayer.placeRandomly(new File(object.name, type))
+                // this._objectLayer.placeRandomly(new File(object.name, type))
+                this._objects.push(new File(object.name, type))
             }
         }, this)
     }

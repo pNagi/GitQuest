@@ -17,6 +17,10 @@ export default class MapGenerator {
         return this.grid
     }
 
+    static isOutOfBound(col, row) {
+        return col < 0 || col >= this.numberOfCols || row < 0 || row >= this.numberOfRows
+    }
+
     static setGrid(col, row, value) {
         this.grid[row][col] = value
         this.grid[row + 1][col] = value
@@ -71,9 +75,5 @@ export default class MapGenerator {
         }
 
         return wallCount
-    }
-
-    static isOutOfBound(col, row) {
-        return col < 0 || col >= this.numberOfCols || row < 0 || row >= this.numberOfRows
     }
 }
