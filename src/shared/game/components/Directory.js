@@ -1,10 +1,13 @@
 import Container from 'shared/game/components/Container'
+
 import {DIRECTORY} from 'shared/game/configs/Types'
+import {SIZE} from 'shared/game/configs'
 
 export default class Directory extends Container {
 
     constructor(name) {
         super(DIRECTORY)
+        this._container.height = (this.numberOfRows - 2) * SIZE
 
         this._name = name
         let text = new createjs.Text(name, '12px Arial', '#eee')

@@ -9,6 +9,8 @@ export default class Sprite {
         this._parent = parent
         this._type = _.head(_.flattenDeep([type]))
         this._sprite = new createjs.Sprite(SpriteSheet.getInstance(), type)
+        this._sprite.width = SIZE
+        this._sprite.height = SIZE
         this.setPosition(col, row)
     }
 

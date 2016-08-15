@@ -26,7 +26,11 @@ export default class Player extends Container {
         return true
     }
 
-    translate(horizontalSpeed, verticalSpeed) {
+    get y() {
+        return this.sprite.y + 8
+    }
+
+    move(horizontalSpeed, verticalSpeed) {
         this._container.x += horizontalSpeed
         this._container.y += verticalSpeed
     }

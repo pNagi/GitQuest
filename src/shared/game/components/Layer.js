@@ -1,4 +1,5 @@
 import Container from 'shared/game/components/Container'
+import {Sprite} from 'shared/game/components'
 
 export default class Layer extends Container {
     constructor(grid) {
@@ -12,8 +13,10 @@ export default class Layer extends Container {
             if (onGrid) {
                 this._placeOnGrid(container, col, row)
             }
+            return true
             // console.log('place successfully')
         } else {
+            return false
             // console.log('place failed')
         }
     }
@@ -21,18 +24,20 @@ export default class Layer extends Container {
     _placeOnGrid(container, col, row) {
         for (let localRow = 0; localRow < container.numberOfRows; localRow++) {
             for (let localCol = 0; localCol < container.numberOfCols; localCol++) {
-                this._grid[localRow + row][localCol + col] = container.getSpriteAt(localCol, localRow)
+                if (!!container.getSpriteAt(localCol, localRow)) {
+                    this._grid[localRow + row][localCol + col] = container.getSpriteAt(localCol, localRow)
+                }
             }
         }
     }
 
-    placeRandomly(container) {
+    placeRandomly(container, redo = true) {
         let safety = 5000
 
         let col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
         let row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
 
-        while (!this.checkAvailability(container, col, row) || safety < 0) {
+        while (redo && !this.checkAvailability(container, col, row) || safety < 0) {
             col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
             row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
             safety--
@@ -44,6 +49,17 @@ export default class Layer extends Container {
 
         this.place(container, col, row)
         return true
+    }
+
+    fillEmpty(type) {
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let col = 0; col < this.numberOfCols; col++) {
+                if (!!!this._grid[row][col]) {
+                    this._grid[row][col] = new Sprite(this, type, col, row)
+                    this._container.addChild(this._grid[row][col].sprite)
+                }
+            }
+        }
     }
 
     checkAvailability(container, col, row) {
@@ -74,5 +90,17 @@ export default class Layer extends Container {
                 }
             }
         }
+    }
+
+    getLayout() {
+        let grid = new Array()
+        for (let row = 0; row < this.numberOfRows; row++) {
+            grid[row] = new Array()
+            for (let col = 0; col < this.numberOfCols; col++) {
+                grid[row][col] = !!this._grid[row][col] ? 1 : 0
+            }
+        }
+
+        return grid
     }
 }

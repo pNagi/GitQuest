@@ -8,6 +8,8 @@ export default class Container {
         this._numberOfRows = grid.length
 
         this._container = new createjs.Container()
+        this._container.width = this.numberOfCols * SIZE
+        this._container.height = this.numberOfRows * SIZE
 
         this._grid = new Array()
         for (let row = 0; row < this.numberOfRows; row++) {

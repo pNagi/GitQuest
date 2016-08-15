@@ -109,11 +109,22 @@ export const PERFECT_TREE_GREEN_WITH_SNOW = 0
 
 //MINT
 export const TREE_MINT = 0
-export const PERFECT_TREE_MINT = 0
+export const PERFECT_TREE_MINT = [
+    [null, 'S1-C3-R3-B2', 'S1-C4-R3-B1', null],
+    ['S1-C3-R3-B3', 'S1-C3-R3-B4', 'S1-C4-R3-B3', 'S1-C4-R3-B4'],
+    ['S1-C3-R4-B1', 'S1-C3-R4-B2', 'S1-C4-R4-B1', 'S1-C4-R4-B2'],
+    [null, 'S1-C3-R4-B4', 'S1-C4-R4-B3', null]
+]
 export const TREE_MINT_WITH_LITTLE_SNOW = 0
 export const PERFECT_TREE_MINT_WITH_LITTLE_SNOW = 0
 export const TREE_MINT_WITH_SNOW = 0
 export const PERFECT_TREE_MINT_WITH_SNOW = 0
+
+export const SMALL_TREE_MINT = [
+    ['S1-C14-R3-B1'],
+    ['S1-C14-R3-B3'],
+    ['S1-C14-R4-B1']
+]
 
 //BROWN
 export const TREE_BROWN = 0

@@ -51,7 +51,17 @@ export default class PathGenerator {
         for (let row = 0; row < this.numberOfRows; row++) {
             for (let col = 0; col < this.numberOfCols; col++) {
                 if (this.grid[row][col] !== 0) {
-                    this.layer.place(new Path(), col, row, true)
+                    this.layer.place(new Path(), col, row)
+                }
+            }
+        }
+    }
+
+    addSprites(grid) {
+        for (let row = 0; row < this.numberOfRows; row++) {
+            for (let col = 0; col < this.numberOfCols; col++) {
+                if (grid[row][col] !== 0) {
+                    this.layer.place(new Path(), col, row)
                 }
             }
         }

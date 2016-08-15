@@ -75,7 +75,7 @@ class GameEngine {
     _enableStage() {
         let tick = () => {
             console.log('tick')
-            this.map.translate()
+            this.map.move()
             return this.stage.update()
         }
 
@@ -94,8 +94,10 @@ class GameEngine {
 
                 switch (e.keyCode) {
                     case KeyCode.ENTER:
+                        this.map.talk()
                         break
                     case KeyCode.SPACE:
+                        this.map.talk()
                         break
                     case KeyCode.KEY_LEFT:
                         this.map.setHorizontalSpeed(-1 * SPEED)

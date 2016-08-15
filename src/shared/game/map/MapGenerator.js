@@ -1,5 +1,5 @@
 // const RANDOM_FILL_PERCENT = 50
-const RANDOM_FILL_PERCENT = 50
+const RANDOM_FILL_PERCENT = 40
 
 const NONE = 0
 const FILL = 1

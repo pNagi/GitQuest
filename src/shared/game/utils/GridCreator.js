@@ -77,18 +77,18 @@ export default class GridCreator {
 
         for (let index = 0 ; index < objects.length ; index++) {
             let object = objects[index]
-            let max = 0
-            for (let row = object.row; row < object.numberOfRows + object.row; row++) {
-                for (let col = object.col; col < object.numberOfCols + object.col; col++) {
-                    if (grid[row][col] > max) {
-                        max = grid[row][col]
+            let min = 99
+            for (let row = object.row - 1; row < object.numberOfRows + object.row + 1; row++) {
+                for (let col = object.col - 1; col < object.numberOfCols + object.col + 1; col++) {
+                    if (grid[row][col] < min) {
+                        min = grid[row][col]
                     }
                 }
             }
 
-            for (let row = object.row; row < object.numberOfRows + object.row; row++) {
-                for (let col = object.col; col < object.numberOfCols + object.col; col++) {
-                    grid[row][col] = max
+            for (let row = object.row - 1; row < object.numberOfRows + object.row + 1; row++) {
+                for (let col = object.col - 1; col < object.numberOfCols + object.col + 1; col++) {
+                    grid[row][col] = min
                 }
             }
         }
@@ -113,17 +113,17 @@ export default class GridCreator {
             return DUNE_BOTTOM_LEFT
         } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom === 0) {
             return STAIR_BOTTOM
-        } else if (neighbour.topLeft === 0) {
+        } else if (neighbour.topLeft === 0 && neighbour.top !== 0 && neighbour.left !== 0) {
             return DUNE_TOP_LEFT_INSIDE
-        } else if (neighbour.topRight === 0) {
+        } else if (neighbour.topRight === 0 && neighbour.top !== 0 && neighbour.right !== 0) {
             return DUNE_TOP_RIGHT_INSIDE
-        } else if (neighbour.bottomLeft === 0) {
+        } else if (neighbour.bottomLeft === 0 && neighbour.bottom !== 0 && neighbour.left !== 0) {
             return DUNE_BOTTOM_LEFT_INSIDE
-        } else if (neighbour.bottomRight === 0) {
+        } else if (neighbour.bottomRight === 0 && neighbour.bottom !== 0 && neighbour.right !== 0) {
             return DUNE_BOTTOM_RIGHT_INSIDE
-        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
-            return DUNE_CENTER
         }
+
+        return undefined
     }
 
     static getDuneType(neighbour) {
@@ -143,16 +143,16 @@ export default class GridCreator {
             return DUNE_BOTTOM_LEFT
         } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom === 0) {
             return DUNE_BOTTOM
-        } else if (neighbour.topLeft === 0) {
+        } else if (neighbour.topLeft === 0 && neighbour.top !== 0 && neighbour.left !== 0) {
             return DUNE_TOP_LEFT_INSIDE
-        } else if (neighbour.topRight === 0) {
+        } else if (neighbour.topRight === 0 && neighbour.top !== 0 && neighbour.right !== 0) {
             return DUNE_TOP_RIGHT_INSIDE
-        } else if (neighbour.bottomLeft === 0) {
+        } else if (neighbour.bottomLeft === 0 && neighbour.bottom !== 0 && neighbour.left !== 0) {
             return DUNE_BOTTOM_LEFT_INSIDE
-        } else if (neighbour.bottomRight === 0) {
+        } else if (neighbour.bottomRight === 0 && neighbour.bottom !== 0 && neighbour.right !== 0) {
             return DUNE_BOTTOM_RIGHT_INSIDE
-        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
-            return DUNE_CENTER
         }
+
+        return undefined
     }
 }
