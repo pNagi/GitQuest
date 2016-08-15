@@ -31,9 +31,17 @@ export default class Map {
 
         this._groundLayer = new Array()
         this._groundLayer[0] = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows, GROUND))
-        this._groundLayer[1] = new Layer(GridCreator.makeDune(MapGenerator.generate(this.numberOfCols, this.numberOfRows)))
+
+        console.log('dune level1')
+        let level1 = MapGenerator.generate(this.numberOfCols, this.numberOfRows)
+        this._groundLayer[1] = new Layer(GridCreator.makeDune(level1, this._path.grid, this._objects))
+
+        console.log('dune level2')
+        let level2 = MapGenerator.generate(this.numberOfCols, this.numberOfRows, level1, 1)
+        this._groundLayer[2] = new Layer(GridCreator.makeDune(level2, this._path.grid, this._objects))
 
         this._map.addChild(this._groundLayer[0].sprite)
+        this._map.addChild(this._groundLayer[2].sprite)
         this._map.addChild(this._groundLayer[1].sprite)
         this._map.addChild(this._objectLayer.sprite)
 
@@ -41,7 +49,6 @@ export default class Map {
         this._horizontalSpeed = 0
         this._verticalSpeed = 0
     }
-
 
     _createObjects(repo) {
         repo.forEach(function(object) {
@@ -190,8 +197,9 @@ export default class Map {
         let endCol = Math.ceil((this._camera.x + this._camera.width) / SIZE)
         let endRow = Math.ceil((this._camera.y + this._camera.height) / SIZE)
 
-        this._groundLayer[0].setVisible(startCol, startRow, endCol, endRow)
-        this._groundLayer[1].setVisible(startCol, startRow, endCol, endRow)
+        for (let index = 0; index < this._groundLayer.length; index++) {
+            this._groundLayer[index].setVisible(startCol, startRow, endCol, endRow)
+        }
         this._objectLayer.setVisible(startCol, startRow, endCol, endRow)
     }
 }

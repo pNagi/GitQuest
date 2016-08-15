@@ -46,6 +46,15 @@ export const STONE_GATE = [
     [null, 'S1-C1-R1-B1', 'S1-C1-R1-B1', 'S1-C1-R1-B1', null]
 ]
 
+//STAIRS
+export const STAIR_BROWN_LEFT = [['S1-C22-R38-B1']]
+export const STAIR_BROWN_RIGHT = [['S1-C21-R38-B2']]
+
+export const STAIR_SILVER_TOP = [['S1-C23-R35-B2']]
+export const STAIR_SILVER_LEFT = [['S1-C23-R38-B1']]
+export const STAIR_SILVER_RIGHT = [['S1-C22-R38-B2']]
+export const STAIR_SILVER_BOTTOM = [['S1-C23-R36-B2']]
+
 //DUNE
 export const LOW_DUNE_TOP_LEFT = [['S1-C1-R17-B3']]
 export const LOW_DUNE_TOP = [['S1-C1-R17-B4']]

@@ -11,7 +11,11 @@ import {
     DUNE_TOP_LEFT_INSIDE,
     DUNE_TOP_RIGHT_INSIDE,
     DUNE_BOTTOM_LEFT_INSIDE,
-    DUNE_BOTTOM_RIGHT_INSIDE
+    DUNE_BOTTOM_RIGHT_INSIDE,
+    STAIR_TOP,
+    STAIR_LEFT,
+    STAIR_RIGHT,
+    STAIR_BOTTOM
 } from 'shared/game/configs/Types'
 
 export default class GridCreator {
@@ -27,9 +31,11 @@ export default class GridCreator {
         return grid
     }
 
-    static makeDune(grid) {
+    static makeDune(grid, exception, objects) {
         let numberOfCols = grid[0].length
         let numberOfRows = grid.length
+
+        grid = this.getRidOfOverlapping(grid, objects)
 
         let getValue = (grid, col, row) => {
             if (col < 0 || col >= numberOfCols || row < 0 || row >= numberOfRows) {
@@ -54,12 +60,70 @@ export default class GridCreator {
                         bottom: getValue(grid, col, row+1),
                         bottomRight: getValue(grid, col+1, row+1)
                     }
-                    newGrid[row][col] = this.getDuneType(neighbour)
+
+                    if (exception[row][col] > 0) {
+                        newGrid[row][col] = this.getStairType(neighbour)
+                    } else {
+                        newGrid[row][col] = this.getDuneType(neighbour)
+                    }
                 }
             }
         }
 
         return newGrid
+    }
+
+    static getRidOfOverlapping(grid, objects) {
+
+        for (let index = 0 ; index < objects.length ; index++) {
+            let object = objects[index]
+            let max = 0
+            for (let row = object.row; row < object.numberOfRows + object.row; row++) {
+                for (let col = object.col; col < object.numberOfCols + object.col; col++) {
+                    if (grid[row][col] > max) {
+                        max = grid[row][col]
+                    }
+                }
+            }
+
+            for (let row = object.row; row < object.numberOfRows + object.row; row++) {
+                for (let col = object.col; col < object.numberOfCols + object.col; col++) {
+                    grid[row][col] = max
+                }
+            }
+        }
+
+        return grid
+    }
+
+    static getStairType(neighbour) {
+        if (neighbour.top === 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
+            return DUNE_TOP_RIGHT
+        } else if (neighbour.top === 0 && neighbour.right !== 0 && neighbour.left === 0 && neighbour.bottom !== 0) {
+            return DUNE_TOP_LEFT
+        } else if (neighbour.top === 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
+            return STAIR_TOP
+        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left === 0 && neighbour.bottom !== 0) {
+            return STAIR_LEFT
+        } else if (neighbour.top !== 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
+            return STAIR_RIGHT
+        } else if (neighbour.top !== 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom === 0) {
+            return DUNE_BOTTOM_RIGHT
+        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left === 0 && neighbour.bottom === 0) {
+            return DUNE_BOTTOM_LEFT
+        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom === 0) {
+            return STAIR_BOTTOM
+        } else if (neighbour.topLeft === 0) {
+            return DUNE_TOP_LEFT_INSIDE
+        } else if (neighbour.topRight === 0) {
+            return DUNE_TOP_RIGHT_INSIDE
+        } else if (neighbour.bottomLeft === 0) {
+            return DUNE_BOTTOM_LEFT_INSIDE
+        } else if (neighbour.bottomRight === 0) {
+            return DUNE_BOTTOM_RIGHT_INSIDE
+        } else if (neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
+            return DUNE_CENTER
+        }
     }
 
     static getDuneType(neighbour) {

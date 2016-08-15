@@ -15,19 +15,16 @@ export default class PathGenerator {
         this.createGrid(player, containers)
         this.generatePath(containers)
 
-        let safety = 100
-        while (this.checkFillPercent() && safety > 0) {
+        let safety = 1000
+        let pass = false
+        while ((!pass || this.checkFillPercent()) && safety > 0) {
             this.createGrid(player, containers)
-            this.generatePath(containers)
+            pass = this.generatePath(containers)
+            console.log('pass', pass)
             safety--
         }
 
-        //check function
-        // check percent filled
-        // check if return true
-
         this.createSprites()
-
         // this.printGrid()
     }
 
@@ -45,8 +42,8 @@ export default class PathGenerator {
             }
         }
 
-        let result = (count / (this.numberOfRows * this.numberOfCols) > 0.5)
-        console.log(result)
+        let result = (count / (this.numberOfRows * this.numberOfCols) > 0.4)
+        console.log(count / (this.numberOfRows * this.numberOfCols))
         return result
     }
 
@@ -73,7 +70,6 @@ export default class PathGenerator {
     }
 
     createGrid(player, containers) {
-        console.log('createGrid', this.numberOfCols, this.numberOfRows)
         this.grid = GridCreator.makeGrid(this.numberOfCols, this.numberOfRows, NONE)
         this.layer = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows))
 
@@ -175,8 +171,10 @@ export default class PathGenerator {
                 }
 
                 if (dirs.length === 0 && final.length === 0) {
-                    this.path[index].push(this.path[index][Math.floor(Math.random() * this.path[index].length)])
-                    continue
+                    console.log('killed itself')
+                    // this.path[index].push(this.path[index][Math.floor(Math.random() * this.path[index].length)])
+                    return false
+                    //continue
                 }
 
                 if (final.length > 0) {
@@ -188,7 +186,7 @@ export default class PathGenerator {
                         this.setGrid(position.col, position.row, finalIndex)
                     }, this)
 
-                    this.path[(finalIndex / 2) - 1] = _.union(this.path[(finalIndex / 2) - 1], this.path[index])
+                    this.path[(finalIndex / 2) - 1] = _.union(this.path[index], this.path[(finalIndex / 2) - 1])
 
                     this.isEnd[index] = true
                 } else {

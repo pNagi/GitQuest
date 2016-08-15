@@ -20,6 +20,10 @@ export default class Sprite {
         return this._type
     }
 
+    get parent() {
+        return this._parent
+    }
+
     get sprite() {
         return this._sprite
     }
