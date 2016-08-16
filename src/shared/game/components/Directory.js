@@ -5,22 +5,22 @@ import {SIZE} from 'shared/game/configs'
 
 export default class Directory extends Container {
 
-    constructor(name) {
+    constructor(info) {
         super(DIRECTORY)
         this._container.height = (this.numberOfRows - 2) * SIZE
 
-        this._name = name
-        let text = new createjs.Text(name, '12px Arial', '#eee')
+        this._info = info
+        let text = new createjs.Text(this._info.name, '12px Arial', '#eee')
         text.textBaseline = 'alphabetic'
         text.y = (this._grid.length - 1) * 16
         this._container.addChild(text)
     }
 
-    get name() {
+    press() {
         return this._name
     }
 
-    press() {
-        return this._name
+    stepOver() {
+        return this._info.path
     }
 }

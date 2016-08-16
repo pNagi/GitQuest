@@ -13,6 +13,10 @@ exports.start = (user, repo, path = '') => {
 
 class GameEngine {
     constructor(user, repo, path) {
+        this.user = user
+        this.repo = repo
+        this.path = path
+
         this._createCamera()
         this._createCanvas()
         this._createStage()
@@ -26,7 +30,7 @@ class GameEngine {
 
     _createCanvas() {
         this.canvas = document.getElementById('canvas')
-        this.canvas.style.backgroundColor = '#eee'
+        this.canvas.style.backgroundColor = '#333'
         this.canvas.width = this.camera.width
         this.canvas.height = this.camera.height
 
@@ -48,6 +52,7 @@ class GameEngine {
 
     loadMap(user, repo, path) {
         this._clearStage()
+        console.log('loadMap', user, repo, path)
 
         let queue = new createjs.LoadQueue()
         queue.on('fileload', this._handleFileLoad, this)
@@ -70,6 +75,14 @@ class GameEngine {
     }
 
     _createMap(repo) {
+        if (this.path !== '') {
+            repo.push({
+                name: 'Back',
+                path: '/' + this.path.split('/').slice(0, -1).join('/'),
+                type: 'dir'
+            })
+        }
+
         this.map = new Map(repo, this.player, this.camera)
         console.log('map', this.map.width, this.map.height)
     }
@@ -82,7 +95,11 @@ class GameEngine {
     _enableStage() {
         let tick = () => {
             console.log('tick')
-            this.map.move()
+            let path = this.map.move()
+            if (!!path) {
+                this.path = path
+                this.loadMap(this.user, this.repo, this.path)
+            }
             return this.stage.update()
         }
 

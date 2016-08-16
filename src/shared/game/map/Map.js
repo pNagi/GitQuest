@@ -7,16 +7,15 @@ import PathGenerator from 'shared/game/map/PathGenerator'
 import {GROUND, GRASS} from 'shared/game/configs/Types'
 import {SIZE} from 'shared/game/configs'
 
-const EXPAND_SIZE = 6
+const EXPAND_SIZE = 10
 
 export default class Map {
 
     constructor(repo, player, camera) {
-
         let repoSize = repo.length
 
-        this._numberOfCols = Math.ceil(repoSize * EXPAND_SIZE)
-        this._numberOfRows = Math.ceil(repoSize * EXPAND_SIZE)
+        this._numberOfCols = Math.ceil(Math.sqrt(repoSize * EXPAND_SIZE)) * 6
+        this._numberOfRows = Math.ceil(Math.sqrt(repoSize * EXPAND_SIZE)) * 6
 
         this._map = new createjs.Container()
 
@@ -36,6 +35,8 @@ export default class Map {
         this._setInitialPosition(camera)
         this._horizontalSpeed = 0
         this._verticalSpeed = 0
+
+        this._sortObjects()
     }
 
     _setPlayer(player) {
@@ -50,10 +51,10 @@ export default class Map {
     _createFilesAndDirectories(repo) {
         repo.forEach(function(object) {
             if (object.type === 'dir') {
-                this._objects.push(new Directory(object.name))
+                this._objects.push(new Directory(object))
             } else if (object.type === 'file') {
                 let type = object.name.split('.').pop()
-                this._objects.push(new File(object.name, type))
+                this._objects.push(new File(object, type))
             }
         }, this)
     }
@@ -86,7 +87,7 @@ export default class Map {
         let level1 = MapGenerator.generate(this.numberOfCols, this.numberOfRows, level2, 1)
         this._environmentLayer.place(new Layer(GridCreator.makeDune(level1, _.union(this._path.grid, [this.player]), this._objects)))
 
-        this._path.addSprites(this._environmentLayer.getLayout())
+        this._path.createSprites(this._environmentLayer.getLayout())
     }
 
     _setInitialPosition(camera) {
@@ -142,9 +143,10 @@ export default class Map {
             this._sortObjects()
         }
 
-        let col = Math.floor(this._player.x / SIZE)
-        let row = Math.floor(this._player.y / SIZE)
-        // this._objectLayer.getSpriteAt()
+        let col = this._player.col
+        let row = this._player.row
+        let stepOverSprite = this._objectLayer.getSpriteAt(col, row)
+        return (stepOverSprite.type === 'S1-C12-R14-B3') ? stepOverSprite.parent.stepOver() : null
     }
 
     _moveHorizontally() {
@@ -193,8 +195,8 @@ export default class Map {
     }
 
     _isImpassableObject(x, y) {
-        let row = Math.ceil((y + 8) / SIZE)
         let col = Math.ceil(x / SIZE)
+        let row = Math.ceil((y + 8) / SIZE)
 
         let passable = this._objectLayer.isPassable(col, row) && this._groundLayer.isPassable(col, row) && this._environmentLayer.isPassable(col, row)
 
@@ -243,8 +245,8 @@ export default class Map {
     }
 
     talk() {
-        let col = Math.ceil(this._player.x / SIZE) + this._player.headTo.col
-        let row = Math.ceil((this._player.y + 8) / SIZE) + this._player.headTo.row
+        let col = this._player.col + this._player.headTo.col
+        let row = this._player.row + this._player.headTo.row
 
         if (this._player.headTo.col < 0) {
             this._objectLayer.getSpriteAt(col, row).parent.turnRight()

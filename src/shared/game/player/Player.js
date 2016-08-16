@@ -1,6 +1,8 @@
 import {Container} from 'shared/game/components'
 import {PLAYER} from 'shared/game/configs/Types'
 
+import {SIZE} from 'shared/game/configs'
+
 export default class Player extends Container {
     constructor(name) {
         super(PLAYER.front)
@@ -8,6 +10,14 @@ export default class Player extends Container {
             col: 0,
             row: 1
         }
+    }
+
+    get col() {
+        return Math.ceil(this.x / SIZE)
+    }
+
+    get row() {
+        return Math.ceil((this.y + 8) / SIZE)
     }
 
     faceFront() {

@@ -4,7 +4,11 @@ export default class InformationWindow {
 
     constructor(width, height) {
         this._window = new createjs.Container()
+        this._createRect(width, height)
+        this._createText()
+    }
 
+    _createRect(width, height) {
         this._rect = new createjs.Shape()
         this._rect.graphics.beginFill('#776787')
         this._rect.graphics.drawRoundRect(0, 0, width - 40, height - 20, 5)
@@ -12,13 +16,15 @@ export default class InformationWindow {
         this._rect.alpha = 0.5
         this.setRectPosition(20, 10)
 
+        this._window.addChild(this._rect)
+    }
+
+    _createText() {
         this._text = new createjs.Text('Hello...', '15px Arial', '#fff')
         this._text.textBaseline = 'alphabetic'
         this.setTextPosition(20, 30)
 
-        this._window.addChild(this._rect)
         this._window.addChild(this._text)
-            // infoWindow.visible = false
     }
 
     setPosition(x, y) {

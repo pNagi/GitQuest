@@ -62,5 +62,3 @@ export const IMPASSABLE_OBJECTS = _.flattenDeep([
     _.valuesIn(PARASECT),
     _.valuesIn(DRAGONITE)
 ])
-
-console.log(IMPASSABLE_OBJECTS)

@@ -61,7 +61,7 @@ export default class MapGenerator {
     }
 
     static isInvalid(col, row) {
-        return this.isOutOfBound(col, row) || (!!this.exception && this.exception[row][col] === this.exceptionValue)
+        return this.isOutOfBound(col, row) || (!!this.exception && this.exception[row] && this.exception[row][col] === this.exceptionValue)
     }
 
     static setGrid(col, row, value) {

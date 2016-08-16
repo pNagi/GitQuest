@@ -17,6 +17,10 @@ export default class Container {
         this._container.width = this.numberOfCols * SIZE
         this._container.height = this.numberOfRows * SIZE
 
+        this._createSprites(grid)
+    }
+
+    _createSprites(grid) {
         this._grid = new Array()
         for (let row = 0; row < this.numberOfRows; row++) {
             this._grid[row] = new Array()
@@ -30,22 +34,18 @@ export default class Container {
     }
 
     faceFront() {
-        console.log('face front', this.type)
         this.type.hasOwnProperty('front') && this.setAnimation(this.type.front)
     }
 
     turnLeft() {
-        console.log('turn left')
         this.type.hasOwnProperty('left') && this.setAnimation(this.type.left)
     }
 
     turnRight() {
-        console.log('turn right')
         this.type.hasOwnProperty('right') && this.setAnimation(this.type.right)
     }
 
     turnBack() {
-        console.log('turn back')
         this.type.hasOwnProperty('back') && this.setAnimation(this.type.back)
     }
 
@@ -120,6 +120,6 @@ export default class Container {
     }
 
     stepOver() {
-
+        return null
     }
 }

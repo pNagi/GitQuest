@@ -3,21 +3,17 @@ import {FILE, UNKNOWN} from 'shared/game/configs/Types'
 
 export default class File extends Container {
 
-    constructor(name, type) {
+    constructor(info, type) {
         super(FILE[type] || UNKNOWN)
 
-        this._name = name
-        let text = new createjs.Text(name, '10px Arial', '#eee')
+        this._info = info
+        let text = new createjs.Text(this._info.name, '10px Arial', '#eee')
         text.textBaseline = 'alphabetic'
         text.y = (this._grid.length) * 16 + 8
         this._container.addChild(text)
     }
 
-    get name() {
-        return this._name
-    }
-
     press() {
-        return this._name
+        return this._info.name
     }
 }

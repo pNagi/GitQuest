@@ -1,8 +1,9 @@
 import _ from 'lodash'
 
+import {SpriteSheet} from 'shared/game/components'
+
 import {SIZE} from 'shared/game/configs'
 import {IMPASSABLE_OBJECTS} from 'shared/game/configs/Passable'
-import {SpriteSheet} from 'shared/game/components'
 
 export default class Sprite {
     constructor(parent, type, col = 0, row = 0) {

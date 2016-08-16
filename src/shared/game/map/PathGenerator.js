@@ -4,6 +4,7 @@ import {GridCreator} from 'shared/game/utils/'
 import {Layer, Path} from 'shared/game/components'
 
 const NONE = 0
+const FILLED = -1
 
 export default class PathGenerator {
 
@@ -11,21 +12,17 @@ export default class PathGenerator {
         this.numberOfCols = numberOfCols
         this.numberOfRows = numberOfRows
 
-        console.log('generate path')
-        this.createGrid(player, containers)
-        this.generatePath(containers)
-
+        this._initPath(player, containers)
+        let pass = this.generatePath(containers)
         let safety = 1000
-        let pass = false
+
         while ((!pass || this.checkFillPercent()) && safety > 0) {
-            this.createGrid(player, containers)
+            this._initPath(player, containers)
             pass = this.generatePath(containers)
-            console.log('pass', pass)
             safety--
         }
 
-        this.createSprites()
-        // this.printGrid()
+        this.createSprites(this.grid)
     }
 
     getLayer() {
@@ -36,33 +33,17 @@ export default class PathGenerator {
         let count = 0
         for (let row = 0; row < this.numberOfRows; row++) {
             for (let col = 0; col < this.numberOfCols; col++) {
-                if (this.grid[row][col] !== 0) {
-                    count++
-                }
+                this.grid[row][col] !== 0 && count++
             }
         }
 
-        let result = (count / (this.numberOfRows * this.numberOfCols) > 0.4)
-        console.log(count / (this.numberOfRows * this.numberOfCols))
-        return result
+        return count / (this.numberOfRows * this.numberOfCols) > 0.4
     }
 
-    createSprites() {
+    createSprites(grid) {
         for (let row = 0; row < this.numberOfRows; row++) {
             for (let col = 0; col < this.numberOfCols; col++) {
-                if (this.grid[row][col] !== 0) {
-                    this.layer.place(new Path(), col, row)
-                }
-            }
-        }
-    }
-
-    addSprites(grid) {
-        for (let row = 0; row < this.numberOfRows; row++) {
-            for (let col = 0; col < this.numberOfCols; col++) {
-                if (grid[row][col] !== 0) {
-                    this.layer.place(new Path(), col, row)
-                }
+                grid[row][col] !== 0 && this.layer.place(new Path(), col, row)
             }
         }
     }
@@ -74,16 +55,13 @@ export default class PathGenerator {
             for (let col = 0 ; col < this.numberOfCols ; col++) {
                 s += ('    ' + this.grid[row][col]).slice(-3)
             }
-            console.log(count % 2 + ':' + s)
             count++
         }
     }
 
-    createGrid(player, containers) {
-        this.grid = GridCreator.makeGrid(this.numberOfCols, this.numberOfRows, NONE)
-        this.layer = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows))
-
+    _placePlayer(player) {
         this.layer.place(player, (this.numberOfCols - player.numberOfCols) / 2, (this.numberOfRows - player.numberOfRows) / 2, false)
+
         let startCol = Math.floor(player.col / 2)
         let startRow = Math.floor(player.row / 2)
         let endCol = Math.ceil((player.col + player.numberOfCols) / 2)
@@ -91,9 +69,23 @@ export default class PathGenerator {
 
         for (let row = startRow; row <= endRow; row++) {
             for (let col = startCol; col <= endCol; col++) {
-                this.setGrid(col * 2, row * 2, -1)
+                this.setGrid(col * 2, row * 2, FILLED)
             }
         }
+    }
+
+    _createLayer() {
+        this.layer = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows))
+    }
+
+    _createGrid() {
+        this.grid = GridCreator.makeGrid(this.numberOfCols, this.numberOfRows, NONE)
+    }
+
+    _initPath(player, containers) {
+        this._createGrid()
+        this._createLayer()
+        this._placePlayer(player)
 
         this.path = new Array()
         this.isEnd = new Array()
@@ -114,22 +106,29 @@ export default class PathGenerator {
             for (let row = startRow; row <= endRow; row++) {
                 for (let col = startCol; col <= endCol; col++) {
                     if (row === endRow) {
-                        this.setGrid(col * 2, row * 2, ((index + 1) * 2) - 1)
+                        this.setGrid(col * 2, row * 2, this.indexToSupportive(index))
                         dirs.push({
                             col: col * 2,
                             row: row * 2
                         })
                     } else {
-                        this.setGrid(col * 2, row * 2, -1)
+                        this.setGrid(col * 2, row * 2, FILLED)
                     }
                 }
             }
 
-            let random = Math.floor(Math.random() * dirs.length)
-            let dir = dirs[random]
+            let dir = dirs[Math.floor(Math.random() * dirs.length)]
             this.path[index].push(dir)
-            this.setGrid(dir.col, dir.row, ((index + 1) * 2))
+            this.setGrid(dir.col, dir.row, this.indexToMain(index))
         }
+    }
+
+    indexToMain(index) {
+        return (index + 1) * 2
+    }
+
+    indexToSupportive(index) {
+        return (index + 1) * 2 - 1
     }
 
     generatePath(containers) {
@@ -152,28 +151,18 @@ export default class PathGenerator {
                     for (let neighbourRow = row - 2; neighbourRow <= row + 2; neighbourRow += 2) {
                         if (!this.isOutOfBound(neighbourCol, neighbourRow)) {
                             if (neighbourCol === col || neighbourRow === row) {
-
-                                //object
-                                if (this.grid[neighbourRow][neighbourCol] === -1) {
+                                if (this.grid[neighbourRow][neighbourCol] === FILLED) {
                                     continue
                                 }
 
-                                //my path
-                                // if (this.grid[neighbourRow][neighbourCol] === ((index + 1) * 2)) {
-                                //     continue
-                                // }
-
-                                //possible path
-                                if (this.grid[neighbourRow][neighbourCol] === NONE || this.grid[neighbourRow][neighbourCol] === (index + 1) * 2 - 1 || this.grid[neighbourRow][neighbourCol] === ((index + 1) * 2)) {
-                                    dirs.push({
-                                        col: neighbourCol,
-                                        row: neighbourRow
-                                    })
+                                let dir = {
+                                    col: neighbourCol,
+                                    row: neighbourRow
+                                }
+                                if (this.grid[neighbourRow][neighbourCol] === NONE || this.grid[neighbourRow][neighbourCol] === this.indexToSupportive(index) || this.grid[neighbourRow][neighbourCol] === this.indexToMain(index)) {
+                                    dirs.push(dir)
                                 } else if (this.grid[neighbourRow][neighbourCol] % 2 === 0) {
-                                    final.push({
-                                        col: neighbourCol,
-                                        row: neighbourRow
-                                    })
+                                    final.push(dir)
                                 }
                             }
                         }
@@ -181,10 +170,7 @@ export default class PathGenerator {
                 }
 
                 if (dirs.length === 0 && final.length === 0) {
-                    console.log('killed itself')
-                    // this.path[index].push(this.path[index][Math.floor(Math.random() * this.path[index].length)])
                     return false
-                    //continue
                 }
 
                 if (final.length > 0) {
