@@ -19,4 +19,8 @@ export default class Directory extends Container {
     get name() {
         return this._name
     }
+
+    press() {
+        return this._name
+    }
 }

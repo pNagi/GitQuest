@@ -7,13 +7,17 @@ export default class File extends Container {
         super(FILE[type] || UNKNOWN)
 
         this._name = name
-        let text = new createjs.Text(name, '12px Arial', '#eee')
+        let text = new createjs.Text(name, '10px Arial', '#eee')
         text.textBaseline = 'alphabetic'
-        text.y = (this._grid.length + 1) * 16
+        text.y = (this._grid.length) * 16 + 8
         this._container.addChild(text)
     }
 
     get name() {
+        return this._name
+    }
+
+    press() {
         return this._name
     }
 }

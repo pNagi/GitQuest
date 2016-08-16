@@ -4,6 +4,8 @@ import {Sprite} from 'shared/game/components'
 
 export default class Container {
     constructor(grid) {
+        this.type = grid
+
         if (!(grid instanceof Array)) {
             grid = grid.front
         }
@@ -25,6 +27,26 @@ export default class Container {
                 }
             }
         }
+    }
+
+    faceFront() {
+        console.log('face front', this.type)
+        this.type.hasOwnProperty('front') && this.setAnimation(this.type.front)
+    }
+
+    turnLeft() {
+        console.log('turn left')
+        this.type.hasOwnProperty('left') && this.setAnimation(this.type.left)
+    }
+
+    turnRight() {
+        console.log('turn right')
+        this.type.hasOwnProperty('right') && this.setAnimation(this.type.right)
+    }
+
+    turnBack() {
+        console.log('turn back')
+        this.type.hasOwnProperty('back') && this.setAnimation(this.type.back)
     }
 
     get x() {
@@ -70,6 +92,13 @@ export default class Container {
         this._container.y = row * SIZE
     }
 
+    setExactPosition(x, y) {
+        this._container.x = x
+        this._container.y = y
+        this._col = Math.floor(x / SIZE)
+        this._row = Math.floor(y / SIZE)
+    }
+
     setAnimation(grid) {
         for (let row = 0; row < this.numberOfRows; row++) {
             for (let col = 0; col < this.numberOfCols; col++) {
@@ -84,5 +113,13 @@ export default class Container {
 
     getSpriteAt(col, row) {
         return this.isOutOfBound(col, row) ? null : this._grid[row][col]
+    }
+
+    press() {
+        return null
+    }
+
+    stepOver() {
+
     }
 }

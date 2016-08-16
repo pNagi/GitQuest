@@ -81,10 +81,10 @@ export default class Map {
         this._environmentLayer = new Layer(GridCreator.makeGrid(this.numberOfCols, this.numberOfRows))
 
         let level2 = MapGenerator.generate(this.numberOfCols, this.numberOfRows)
-        this._environmentLayer.place(new Layer(GridCreator.makeDune(level2, this._path.grid, this._objects)))
+        this._environmentLayer.place(new Layer(GridCreator.makeDune(level2, _.union(this._path.grid, [this.player]), this._objects)))
 
         let level1 = MapGenerator.generate(this.numberOfCols, this.numberOfRows, level2, 1)
-        this._environmentLayer.place(new Layer(GridCreator.makeDune(level1, this._path.grid, this._objects)))
+        this._environmentLayer.place(new Layer(GridCreator.makeDune(level1, _.union(this._path.grid, [this.player]), this._objects)))
 
         this._path.addSprites(this._environmentLayer.getLayout())
     }
@@ -141,6 +141,10 @@ export default class Map {
             this._setVisibleArea()
             this._sortObjects()
         }
+
+        let col = Math.floor(this._player.x / SIZE)
+        let row = Math.floor(this._player.y / SIZE)
+        // this._objectLayer.getSpriteAt()
     }
 
     _moveHorizontally() {
@@ -185,7 +189,7 @@ export default class Map {
     }
 
     _isOutOfBound(x, y) {
-        return (x < 0 || x >= this.width - this._player.width || y < 0 || y >= this.height - this._player.height)
+        return (x < 0 || x > this.width - this._player.width || y < 0 || y > this.height - this._player.height)
     }
 
     _isImpassableObject(x, y) {
@@ -230,8 +234,8 @@ export default class Map {
     _setVisibleArea() {
         let startCol = Math.floor(this._camera.x / SIZE)
         let startRow = Math.floor(this._camera.y / SIZE)
-        let endCol = Math.ceil((this._camera.x + this._camera.width) / SIZE)
-        let endRow = Math.ceil((this._camera.y + this._camera.height) / SIZE)
+        let endCol = Math.floor((this._camera.x + this._camera.width) / SIZE)
+        let endRow = Math.floor((this._camera.y + this._camera.height) / SIZE)
 
         this._groundLayer.setVisible(startCol, startRow, endCol, endRow)
         this._environmentLayer.setVisible(startCol, startRow, endCol, endRow)
@@ -239,6 +243,19 @@ export default class Map {
     }
 
     talk() {
+        let col = Math.ceil(this._player.x / SIZE) + this._player.headTo.col
+        let row = Math.ceil((this._player.y + 8) / SIZE) + this._player.headTo.row
 
+        if (this._player.headTo.col < 0) {
+            this._objectLayer.getSpriteAt(col, row).parent.turnRight()
+        } else if (this._player.headTo.col > 0) {
+            this._objectLayer.getSpriteAt(col, row).parent.turnLeft()
+        } else if (this._player.headTo.row < 0) {
+            this._objectLayer.getSpriteAt(col, row).parent.faceFront()
+        } else if (this._player.headTo.row > 0) {
+            this._objectLayer.getSpriteAt(col, row).parent.turnBack()
+        }
+
+        return this._objectLayer.getSpriteAt(col, row).parent.press()
     }
 }

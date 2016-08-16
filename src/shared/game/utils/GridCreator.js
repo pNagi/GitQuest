@@ -97,13 +97,13 @@ export default class GridCreator {
     }
 
     static getStairType(neighbour) {
-        if (neighbour.topLeft === 0 && neighbour.top !== 0 && neighbour.left !== 0) {
+        if (neighbour.topLeft === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_TOP_LEFT_INSIDE
-        } else if (neighbour.topRight === 0 && neighbour.top !== 0 && neighbour.right !== 0) {
+        } else if (neighbour.topRight === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_TOP_RIGHT_INSIDE
-        } else if (neighbour.bottomLeft === 0 && neighbour.bottom !== 0 && neighbour.left !== 0) {
+        } else if (neighbour.bottomLeft === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_BOTTOM_LEFT_INSIDE
-        } else if (neighbour.bottomRight === 0 && neighbour.bottom !== 0 && neighbour.right !== 0) {
+        } else if (neighbour.bottomRight === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_BOTTOM_RIGHT_INSIDE
         } else if (neighbour.top === 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_TOP_RIGHT
@@ -127,13 +127,13 @@ export default class GridCreator {
     }
 
     static getDuneType(neighbour) {
-        if (neighbour.topLeft === 0 && neighbour.top !== 0 && neighbour.left !== 0) {
+        if (neighbour.topLeft === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_TOP_LEFT_INSIDE
-        } else if (neighbour.topRight === 0 && neighbour.top !== 0 && neighbour.right !== 0) {
+        } else if (neighbour.topRight === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_TOP_RIGHT_INSIDE
-        } else if (neighbour.bottomLeft === 0 && neighbour.bottom !== 0 && neighbour.left !== 0) {
+        } else if (neighbour.bottomLeft === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_BOTTOM_LEFT_INSIDE
-        } else if (neighbour.bottomRight === 0 && neighbour.bottom !== 0 && neighbour.right !== 0) {
+        } else if (neighbour.bottomRight === 0 && neighbour.top !== 0 && neighbour.right !== 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_BOTTOM_RIGHT_INSIDE
         } else if (neighbour.top === 0 && neighbour.right === 0 && neighbour.left !== 0 && neighbour.bottom !== 0) {
             return DUNE_TOP_RIGHT

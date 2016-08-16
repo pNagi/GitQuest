@@ -14,11 +14,9 @@ export default class Layer extends Container {
                 this._placeOnGrid(container, col, row)
             }
             return true
-            // console.log('place successfully')
-        } else {
-            return false
-            // console.log('place failed')
         }
+
+        return false
     }
 
     _placeOnGrid(container, col, row) {
@@ -37,7 +35,7 @@ export default class Layer extends Container {
         let col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
         let row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
 
-        while (redo && !this.checkAvailability(container, col, row) || safety < 0) {
+        while (redo && !this.checkAvailability(container, col, row) && safety > 0) {
             col = Math.floor(Math.random() * (this.numberOfCols - container.numberOfCols - 2) + 1)
             row = Math.floor(Math.random() * (this.numberOfRows - container.numberOfRows - 2) + 1)
             safety--

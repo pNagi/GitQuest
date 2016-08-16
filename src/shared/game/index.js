@@ -1,6 +1,8 @@
 import * as KeyCode from 'shared/game/constants/keyCodes'
 import * as API from 'shared/game/constants/API'
 
+import InformationWindow from 'shared/game/components/InformationWindow'
+
 import Player from 'shared/game/player/Player'
 import Map from 'shared/game/map/Map'
 import Camera from 'shared/game/camera/Camera'
@@ -27,6 +29,9 @@ class GameEngine {
         this.canvas.style.backgroundColor = '#eee'
         this.canvas.width = this.camera.width
         this.canvas.height = this.camera.height
+
+        this.informationWindow = new InformationWindow(this.camera.width, this.camera.height / 3)
+        this.informationWindow.setPosition(0, this.camera.height * 2 / 3)
     }
 
     _createStage() {
@@ -38,6 +43,7 @@ class GameEngine {
 
     _createPlayer(name) {
         this.player = new Player(name)
+        console.log('player', this.player.width, this.player.height)
     }
 
     loadMap(user, repo, path) {
@@ -65,6 +71,7 @@ class GameEngine {
 
     _createMap(repo) {
         this.map = new Map(repo, this.player, this.camera)
+        console.log('map', this.map.width, this.map.height)
     }
 
     _handleComplete(event) {
@@ -94,26 +101,30 @@ class GameEngine {
 
                 switch (e.keyCode) {
                     case KeyCode.ENTER:
-                        this.map.talk()
+                        this.talk()
                         break
                     case KeyCode.SPACE:
-                        this.map.talk()
+                        this.talk()
                         break
                     case KeyCode.KEY_LEFT:
                         this.map.setHorizontalSpeed(-1 * SPEED)
                         this.player.turnLeft()
+                        this.informationWindow.visible = false
                         break
                     case KeyCode.KEY_UP:
                         this.map.setVerticalSpeed(-1 * SPEED)
                         this.player.turnBack()
+                        this.informationWindow.visible = false
                         break
                     case KeyCode.KEY_RIGHT:
                         this.map.setHorizontalSpeed(SPEED)
                         this.player.turnRight()
+                        this.informationWindow.visible = false
                         break
                     case KeyCode.KEY_DOWN:
                         this.map.setVerticalSpeed(SPEED)
                         this.player.faceFront()
+                        this.informationWindow.visible = false
                         break
                 }
             }
@@ -130,6 +141,19 @@ class GameEngine {
 
     _addMapToStage() {
         this.stage.addChild(this.map.sprite)
+        this.stage.addChild(this.informationWindow.sprite)
+
         this.stage.update()
+    }
+
+    talk() {
+        let information = this.map.talk()
+        if (!!information && !this.informationWindow.visible) {
+            console.log('info', information)
+            this.informationWindow.setText(information)
+            this.informationWindow.visible = true
+        } else {
+            this.informationWindow.visible = false
+        }
     }
 }
