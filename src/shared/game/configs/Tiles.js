@@ -4,25 +4,233 @@ export const EMPTY = [
     ['S1-C1-R1-B1']
 ]
 
-export const CHARACTER_2_FRONT = [
-    ['S2-C3-R1-B1', 'S2-C3-R1-B2'],
-    ['S2-C3-R1-B3', 'S2-C3-R1-B4']
-]
+export const PIKACHU = {
+    front: [
+        ['S3-C21-R4-B1', 'S3-C21-R4-B2'],
+        ['S3-C21-R4-B3', 'S3-C21-R4-B4']
+    ],
+    back: [
+        ['S3-C21-R3-B1', 'S3-C21-R3-B2'],
+        ['S3-C21-R3-B3', 'S3-C21-R3-B4']
+    ],
+    left: [
+        ['S3-C22-R3-B1', 'S3-C22-R3-B2'],
+        ['S3-C22-R3-B3', 'S3-C22-R3-B4']
+    ],
+    right: [
+        ['S3-C22-R4-B1', 'S3-C22-R4-B2'],
+        ['S3-C22-R4-B3', 'S3-C22-R4-B4']
+    ]
+}
 
-export const CHARACTER_2_LEFT = [
-    ['S2-C4-R2-B1', 'S2-C4-R2-B2'],
-    ['S2-C4-R2-B3', 'S2-C4-R2-B4']
-]
+export const CHARIZARD = {
+    front: [
+        ['S3-C13-R2-B1', 'S3-C13-R2-B2'],
+        ['S3-C13-R2-B3', 'S3-C13-R2-B4']
+    ],
+    back: [
+        ['S3-C13-R1-B1', 'S3-C13-R1-B2'],
+        ['S3-C13-R1-B3', 'S3-C13-R1-B4']
+    ],
+    left: [
+        ['S3-C14-R1-B1', 'S3-C14-R1-B2'],
+        ['S3-C14-R1-B3', 'S3-C14-R1-B4']
+    ],
+    right: [
+        ['S3-C14-R2-B1', 'S3-C14-R2-B2'],
+        ['S3-C14-R2-B3', 'S3-C14-R2-B4']
+    ]
+}
 
-export const CHARACTER_2_RIGHT = [
-    ['S2-C4-R1-B1', 'S2-C4-R1-B2'],
-    ['S2-C4-R1-B3', 'S2-C4-R1-B4']
-]
+export const BEEDRILL = {
+    front: [
+        ['S3-C1-R4-B1', 'S3-C1-R4-B2'],
+        ['S3-C1-R4-B3', 'S3-C1-R4-B4']
+    ],
+    back: [
+        ['S3-C1-R3-B1', 'S3-C1-R3-B2'],
+        ['S3-C1-R3-B3', 'S3-C1-R3-B4']
+    ],
+    left: [
+        ['S3-C2-R3-B1', 'S3-C2-R3-B2'],
+        ['S3-C2-R3-B3', 'S3-C2-R3-B4']
+    ],
+    right: [
+        ['S3-C2-R4-B1', 'S3-C2-R4-B2'],
+        ['S3-C2-R4-B3', 'S3-C2-R4-B4']
+    ]
+}
 
-export const CHARACTER_2_BACK = [
-    ['S2-C3-R2-B1', 'S2-C3-R2-B2'],
-    ['S2-C3-R2-B3', 'S2-C3-R2-B4']
-]
+export const GOLBAT = {
+    front: [
+        ['S3-C27-R6-B1', 'S3-C27-R6-B2'],
+        ['S3-C27-R6-B3', 'S3-C27-R6-B4']
+    ],
+    back: [
+        ['S3-C27-R5-B1', 'S3-C27-R5-B2'],
+        ['S3-C27-R5-B3', 'S3-C27-R5-B4']
+    ],
+    left: [
+        ['S3-C28-R5-B1', 'S3-C28-R5-B2'],
+        ['S3-C28-R5-B3', 'S3-C28-R5-B4']
+    ],
+    right: [
+        ['S3-C28-R6-B1', 'S3-C28-R6-B2'],
+        ['S3-C28-R6-B3', 'S3-C28-R6-B4']
+    ]
+}
+
+export const CLEFABLE = {
+    front: [
+        ['S3-C15-R6-B1', 'S3-C15-R6-B2'],
+        ['S3-C15-R6-B3', 'S3-C15-R6-B4']
+    ],
+    back: [
+        ['S3-C15-R5-B1', 'S3-C15-R5-B2'],
+        ['S3-C15-R5-B3', 'S3-C15-R5-B4']
+    ],
+    left: [
+        ['S3-C16-R5-B1', 'S3-C16-R5-B2'],
+        ['S3-C16-R5-B3', 'S3-C16-R5-B4']
+    ],
+    right: [
+        ['S3-C16-R6-B1', 'S3-C16-R6-B2'],
+        ['S3-C16-R6-B3', 'S3-C16-R6-B4']
+    ]
+}
+
+export const WIGGLYTUFF = {
+    front: [
+        ['S3-C23-R6-B1', 'S3-C23-R6-B2'],
+        ['S3-C23-R6-B3', 'S3-C23-R6-B4']
+    ],
+    back: [
+        ['S3-C23-R5-B1', 'S3-C23-R5-B2'],
+        ['S3-C23-R5-B3', 'S3-C23-R5-B4']
+    ],
+    left: [
+        ['S3-C24-R5-B1', 'S3-C24-R5-B2'],
+        ['S3-C24-R5-B3', 'S3-C24-R5-B4']
+    ],
+    right: [
+        ['S3-C24-R6-B1', 'S3-C24-R6-B2'],
+        ['S3-C24-R6-B3', 'S3-C24-R6-B4']
+    ]
+}
+
+export const PIDGEOT = {
+    front: [
+        ['S3-C7-R4-B1', 'S3-C7-R4-B2'],
+        ['S3-C7-R4-B3', 'S3-C7-R4-B4']
+    ],
+    back: [
+        ['S3-C7-R3-B1', 'S3-C7-R3-B2'],
+        ['S3-C7-R3-B3', 'S3-C7-R3-B4']
+    ],
+    left: [
+        ['S3-C8-R3-B1', 'S3-C8-R3-B2'],
+        ['S3-C8-R3-B3', 'S3-C8-R3-B4']
+    ],
+    right: [
+        ['S3-C8-R4-B1', 'S3-C8-R4-B2'],
+        ['S3-C8-R4-B3', 'S3-C8-R4-B4']
+    ]
+}
+
+export const VENUSAUR = {
+    front: [
+        ['S3-C5-R2-B1', 'S3-C5-R2-B2'],
+        ['S3-C5-R2-B3', 'S3-C5-R2-B4']
+    ],
+    back: [
+        ['S3-C5-R1-B1', 'S3-C5-R1-B2'],
+        ['S3-C5-R1-B3', 'S3-C5-R1-B4']
+    ],
+    left: [
+        ['S3-C6-R1-B1', 'S3-C6-R1-B2'],
+        ['S3-C6-R1-B3', 'S3-C6-R1-B4']
+    ],
+    right: [
+        ['S3-C6-R2-B1', 'S3-C6-R2-B2'],
+        ['S3-C6-R2-B3', 'S3-C6-R2-B4']
+    ]
+}
+
+export const VILEPLUME = {
+    front: [
+        ['S3-C3-R8-B1', 'S3-C3-R8-B2'],
+        ['S3-C3-R8-B3', 'S3-C3-R8-B4']
+    ],
+    back: [
+        ['S3-C3-R7-B1', 'S3-C3-R7-B2'],
+        ['S3-C3-R7-B3', 'S3-C3-R7-B4']
+    ],
+    left: [
+        ['S3-C4-R7-B1', 'S3-C4-R7-B2'],
+        ['S3-C4-R7-B3', 'S3-C4-R7-B4']
+    ],
+    right: [
+        ['S3-C4-R8-B1', 'S3-C4-R8-B2'],
+        ['S3-C4-R8-B3', 'S3-C4-R8-B4']
+    ]
+}
+
+export const PARASECT = {
+    front: [
+        ['S3-C7-R8-B1', 'S3-C7-R8-B2'],
+        ['S3-C7-R8-B3', 'S3-C7-R8-B4']
+    ],
+    back: [
+        ['S3-C7-R7-B1', 'S3-C7-R7-B2'],
+        ['S3-C7-R7-B3', 'S3-C7-R7-B4']
+    ],
+    left: [
+        ['S3-C8-R7-B1', 'S3-C8-R7-B2'],
+        ['S3-C8-R7-B3', 'S3-C8-R7-B4']
+    ],
+    right: [
+        ['S3-C8-R8-B1', 'S3-C8-R8-B2'],
+        ['S3-C8-R8-B3', 'S3-C8-R8-B4']
+    ]
+}
+
+export const DRAGONITE = {
+    front: [
+        ['S3-C1-R22-B1', 'S3-C1-R22-B2'],
+        ['S3-C1-R22-B3', 'S3-C1-R22-B4']
+    ],
+    back: [
+        ['S3-C1-R21-B1', 'S3-C1-R21-B2'],
+        ['S3-C1-R21-B3', 'S3-C1-R21-B4']
+    ],
+    left: [
+        ['S3-C2-R21-B1', 'S3-C2-R21-B2'],
+        ['S3-C2-R21-B3', 'S3-C2-R21-B4']
+    ],
+    right: [
+        ['S3-C2-R22-B1', 'S3-C2-R22-B2'],
+        ['S3-C2-R22-B3', 'S3-C2-R22-B4']
+    ]
+}
+
+export const CHARACTER_2 = {
+    front: [
+        ['S2-C3-R1-B1', 'S2-C3-R1-B2'],
+        ['S2-C3-R1-B3', 'S2-C3-R1-B4']
+    ],
+    back: [
+        ['S2-C3-R2-B1', 'S2-C3-R2-B2'],
+        ['S2-C3-R2-B3', 'S2-C3-R2-B4']
+    ],
+    left: [
+        ['S2-C4-R2-B1', 'S2-C4-R2-B2'],
+        ['S2-C4-R2-B3', 'S2-C4-R2-B4']
+    ],
+    right: [
+        ['S2-C4-R1-B1', 'S2-C4-R1-B2'],
+        ['S2-C4-R1-B3', 'S2-C4-R1-B4']
+    ]
+}
 
 export const ROUND_ROCK_BROWN = [
     ['S1-C9-R22-B2']

@@ -1,33 +1,29 @@
 import {Container} from 'shared/game/components'
-import {PLAYER_FRONT, PLAYER_LEFT, PLAYER_RIGHT, PLAYER_BACK} from 'shared/game/configs/Types'
+import {PLAYER} from 'shared/game/configs/Types'
 
 export default class Player extends Container {
     constructor(name) {
-        super(PLAYER_FRONT)
+        super(PLAYER.front)
     }
 
     faceFront() {
-        this.setAnimation(PLAYER_FRONT)
+        this.setAnimation(PLAYER.front)
     }
 
     turnLeft() {
-        this.setAnimation(PLAYER_LEFT)
+        this.setAnimation(PLAYER.left)
     }
 
     turnRight() {
-        this.setAnimation(PLAYER_RIGHT)
+        this.setAnimation(PLAYER.right)
     }
 
     turnBack() {
-        this.setAnimation(PLAYER_BACK)
+        this.setAnimation(PLAYER.back)
     }
 
     isPassable() {
         return true
-    }
-
-    get y() {
-        return this.sprite.y + 8
     }
 
     move(horizontalSpeed, verticalSpeed) {

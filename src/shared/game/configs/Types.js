@@ -1,8 +1,5 @@
 import {
-    CHARACTER_2_FRONT,
-    CHARACTER_2_LEFT,
-    CHARACTER_2_RIGHT,
-    CHARACTER_2_BACK,
+    CHARACTER_2,
     TILE_GROUND,
     GRASS_GREEN,
     STONE_GATE,
@@ -26,20 +23,39 @@ import {
     ROUND_ROCK_BROWN,
     EMPTY,
     SMALL_TREE_MINT,
-    PERFECT_TREE_MINT
+    PERFECT_TREE_MINT,
+    PIKACHU,
+    CHARIZARD,
+    BEEDRILL,
+    GOLBAT,
+    CLEFABLE,
+    WIGGLYTUFF,
+    PIDGEOT,
+    VENUSAUR,
+    VILEPLUME,
+    PARASECT,
+    DRAGONITE
 } from 'shared/game/configs/Tiles'
 
-export const PLAYER_FRONT = CHARACTER_2_FRONT
-export const PLAYER_LEFT = CHARACTER_2_LEFT
-export const PLAYER_RIGHT = CHARACTER_2_RIGHT
-export const PLAYER_BACK = CHARACTER_2_BACK
+export const PLAYER = CHARACTER_2
 
-export const UNKNOWN = ROUND_ROCK_BROWN
+export const UNKNOWN = DRAGONITE
 
 export const GROUND = TILE_GROUND
 export const GRASS = GRASS_GREEN
 export const DIRECTORY = STONE_GATE
-export const FILE = {}
+export const FILE = {
+    md: PIKACHU,
+    js: CHARIZARD,
+    json: BEEDRILL,
+    yml: GOLBAT,
+    css: CLEFABLE,
+    scss: WIGGLYTUFF,
+    html: PIDGEOT,
+    pug: VENUSAUR,
+    png: VILEPLUME,
+    jpg: PARASECT
+}
 
 export const PATH = EMPTY
 

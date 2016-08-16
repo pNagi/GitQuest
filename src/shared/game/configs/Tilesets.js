@@ -3,7 +3,7 @@ import TilesetByMagiscarf from '../../../../build/img/bunch_o__free_tiles_by_mag
 export const MapTileset = {
     img: TilesetByMagiscarf,
     width: 992,
-    height: 1264
+    height: 1280
 }
 
 import PokemonTileset from '../../../../build/img/f30221.png'
@@ -18,6 +18,6 @@ import HoennOwsTileset from '../../../../build/img/tileset-hoenn_ows_remake.png'
 
 export const PlayerTileset = {
     img: HoennOwsTileset,
-    width: 800,
-    height: 600
+    width: 576,
+    height: 512
 }

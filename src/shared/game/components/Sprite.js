@@ -36,7 +36,7 @@ export default class Sprite {
     }
 
     setFrame(frame) {
-        this._sprite.gotoAndStop(frame)
+        this._sprite.gotoAndPlay(frame)
     }
 
     isPassable() {

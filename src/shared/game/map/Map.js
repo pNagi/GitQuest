@@ -136,6 +136,11 @@ export default class Map {
     move() {
         this._moveHorizontally()
         this._moveVertically()
+
+        if (this._horizontalSpeed !== 0 || this._verticalSpeed !== 0) {
+            this._setVisibleArea()
+            this._sortObjects()
+        }
     }
 
     _moveHorizontally() {
@@ -151,8 +156,6 @@ export default class Map {
                     }
                 }
             }
-            this._setVisibleArea()
-            this._sortObjects()
         }
     }
 
@@ -169,8 +172,6 @@ export default class Map {
                     }
                 }
             }
-            this._setVisibleArea()
-            this._sortObjects()
         }
     }
 
@@ -188,7 +189,7 @@ export default class Map {
     }
 
     _isImpassableObject(x, y) {
-        let row = Math.ceil(y / SIZE)
+        let row = Math.ceil((y + 8) / SIZE)
         let col = Math.ceil(x / SIZE)
 
         let passable = this._objectLayer.isPassable(col, row) && this._groundLayer.isPassable(col, row) && this._environmentLayer.isPassable(col, row)

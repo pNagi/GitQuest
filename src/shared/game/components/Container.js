@@ -4,6 +4,10 @@ import {Sprite} from 'shared/game/components'
 
 export default class Container {
     constructor(grid) {
+        if (!(grid instanceof Array)) {
+            grid = grid.front
+        }
+
         this._numberOfCols = grid[0].length
         this._numberOfRows = grid.length
 

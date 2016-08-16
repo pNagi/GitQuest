@@ -13,17 +13,24 @@ import {
     LOW_DUNE_WITH_GRASS_TOP_RIGHT_INSIDE,
     LOW_DUNE_WITH_GRASS_BOTTOM_LEFT_INSIDE,
     LOW_DUNE_WITH_GRASS_BOTTOM_RIGHT_INSIDE,
-    ROUND_ROCK_BROWN
+    ROUND_ROCK_BROWN,
+    PIKACHU,
+    CHARIZARD,
+    BEEDRILL,
+    GOLBAT,
+    CLEFABLE,
+    WIGGLYTUFF,
+    PIDGEOT,
+    VENUSAUR,
+    VILEPLUME,
+    PARASECT,
+    DRAGONITE
 } from 'shared/game/configs/Tiles'
 
 export const IMPASSABLE_OBJECTS = _.flattenDeep([
-    'S1-C14-R16-B3',
-    'S1-C13-R16-B3',
+    'S1-C14-R17-B1',
     'S1-C11-R14-B4',
     'S1-C12-R14-B4',
-    'S1-C11-R14-B2',
-    'S1-C12-R14-B2',
-    'S1-C14-R17-B1',
     'S1-C13-R17-B1',
     LOW_DUNE_WITH_GRASS_TOP_LEFT,
     LOW_DUNE_WITH_GRASS_TOP,
@@ -37,7 +44,23 @@ export const IMPASSABLE_OBJECTS = _.flattenDeep([
     LOW_DUNE_WITH_GRASS_TOP_RIGHT_INSIDE,
     LOW_DUNE_WITH_GRASS_BOTTOM_LEFT_INSIDE,
     LOW_DUNE_WITH_GRASS_BOTTOM_RIGHT_INSIDE,
-    ROUND_ROCK_BROWN
+    ROUND_ROCK_BROWN,
+    'S1-C3-R4-B2',
+    'S1-C4-R4-B1',
+    'S1-C3-R4-B4',
+    'S1-C4-R4-B3',
+    'S1-C14-R4-B1',
+    _.valuesIn(PIKACHU),
+    _.valuesIn(CHARIZARD),
+    _.valuesIn(BEEDRILL),
+    _.valuesIn(GOLBAT),
+    _.valuesIn(CLEFABLE),
+    _.valuesIn(WIGGLYTUFF),
+    _.valuesIn(PIDGEOT),
+    _.valuesIn(VENUSAUR),
+    _.valuesIn(VILEPLUME),
+    _.valuesIn(PARASECT),
+    _.valuesIn(DRAGONITE)
 ])
 
 console.log(IMPASSABLE_OBJECTS)
